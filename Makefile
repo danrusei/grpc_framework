@@ -10,6 +10,10 @@ build:
 clean:
 	go clean ./...
 
+## generate: generates the Go and Python grpc libraries 
+generate:
+	/home/rdan/protobuf/bin/protoc -I proto --go_out=plugins=grpc:proto/ proto/api.proto
+
 ## help: prints this help message
 help:
 	@echo "Usage: \n"

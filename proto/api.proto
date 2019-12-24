@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package api;
+
+service ProdService {
+    rpc GetProds(ClientRequest) returns (ClientResponse);
+}
+
+message ClientRequest {
+    string vendor = 1;
+    string prodType = 2;
+}
+
+message ClientResponse {
+    string products = 1;
+}
+
+service BackendService {
+    rpc RetrieveItems(ApiRequest) returns (ApiResponse);
+}
+
+message ApiRequest {
+    string vendor = 1;
+    string prodType = 2;
+}
+
+message ApiResponse {
+    repeated string prods = 1;
+}
