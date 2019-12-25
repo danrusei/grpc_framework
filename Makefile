@@ -1,10 +1,9 @@
 .DEFAULT_GOAL := help
 
-## build: build the GRPC Client, Server and Backend
+## build: build the GRPC Client, Server (Backend is in Python)
 build:
 	go build -o client ./client/.
 	go build -o server ./server/.
-	go build -o backend ./backend/.
 
 ## clean: cleans all the binaries
 clean:
