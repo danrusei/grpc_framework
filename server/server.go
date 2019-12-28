@@ -1,16 +1,20 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
-	"google.golang.org/grpc"
 	"log"
 	"net"
+
+	"google.golang.org/grpc"
 )
 
 var (
 	port = flag.Int("grpc-port", 8080, "The gRPC server port")
 )
+
+type server struct{}
 
 func main() {
 
@@ -34,4 +38,10 @@ func run(addr string) error {
 	}
 
 	return nil
+}
+
+//GetProds implement the GRPC server function
+func (serv *server) GetProds(ctx context.Context, req *api.ClientRequest) (*api.ClientResponse, error) {
+
+	return nil, nil
 }
