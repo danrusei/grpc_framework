@@ -48,6 +48,8 @@ func run(addr string) error {
 
 	api.RegisterProdServiceServer(srv, newServer())
 
+	log.Printf("Serving gRPC on https://%s", addr)
+
 	if err := (srv.Serve(lis)); err != nil {
 		return fmt.Errorf("Unable to start GRPC server: %s", err)
 	}
