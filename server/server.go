@@ -66,12 +66,12 @@ func (serv server) GetProds(ctx context.Context, req *api.ClientRequest) (*api.C
 	}
 	defer conn.Close()
 
+	storage := api.NewBackendServiceClient(conn)
+
 	itemsRequest := api.ApiRequest{
 		Vendor:   req.Vendor,
 		ProdType: req.ProdType,
 	}
-
-	storage := api.NewBackendServiceClient(conn)
 	itemsResponse, err := storage.RetrieveItems(ctx, &itemsRequest)
 	if err != nil {
 		return nil, fmt.Errorf("wrong RPC request: %v", err)
