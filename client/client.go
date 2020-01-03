@@ -6,23 +6,28 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 
 	api "github.com/Danr17/grpc_framework/proto"
 	"google.golang.org/grpc"
 )
 
 var (
-	addr   = flag.String("addr", "localhost", "The address of the server to connect to")
-	port   = flag.String("port", "8080", "The port to connect to")
-	vendor = flag.String("vendor", "google", "Select a cloud Vendor")
+	addr = flag.String("addr", "localhost", "The address of the server to connect to")
+	port = flag.String("port", "8080", "The port to connect to")
 )
 
 func main() {
 
 	flag.Parse()
 
-	if err := run(*addr, *port, *vendor); err != nil {
-		log.Fatalf("could not start the client: %s", err)
+	if flag.NArg() < 1 {
+		fmt.Fprintln(os.Stderr, "missing vendor: google, aws, oracle")
+		os.Exit(1)
+	}
+
+	if err := run(*addr, *port, flag.Arg(0)); err != nil {
+		log.Fatalln(err)
 	}
 
 }
@@ -43,7 +48,7 @@ func run(addr, port string, vendor string) error {
 	client := api.NewProdServiceClient(conn)
 	response, err := client.GetProds(ctx, &requestProd)
 	if err != nil {
-		return nil
+		return fmt.Errorf("Could not get the products: %v", err)
 	}
 
 	fmt.Printf("%s products are: %s\n", vendor, response.GetProducts())

@@ -23,9 +23,9 @@ type server struct {
 func newServer() *server {
 
 	serv := map[string][]string{
-		"google": []string{"compute", "storage"},
-		"aws":    []string{"compute", "storage"},
-		"oracle": []string{"compute", "storage"},
+		"google": []string{"google_compute", "google_storage"},
+		"aws":    []string{"aws_compute", "aws_storage"},
+		"oracle": []string{"oracle_compute", "oracle_storage"},
 	}
 
 	return &server{prod: serv}
@@ -71,7 +71,7 @@ func (serv server) GetProds(ctx context.Context, req *api.ClientRequest) (*api.C
 		}
 
 	} else {
-		return nil, fmt.Errorf("vendor unavailable")
+		return nil, fmt.Errorf("wrong vendor selection")
 	}
 
 	clientResponse := api.ClientResponse{
