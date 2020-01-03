@@ -26,7 +26,6 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type ClientRequest struct {
 	Vendor               string   `protobuf:"bytes,1,opt,name=vendor,proto3" json:"vendor,omitempty"`
-	ProdType             string   `protobuf:"bytes,2,opt,name=prodType,proto3" json:"prodType,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -60,13 +59,6 @@ var xxx_messageInfo_ClientRequest proto.InternalMessageInfo
 func (m *ClientRequest) GetVendor() string {
 	if m != nil {
 		return m.Vendor
-	}
-	return ""
-}
-
-func (m *ClientRequest) GetProdType() string {
-	if m != nil {
-		return m.ProdType
 	}
 	return ""
 }
@@ -110,117 +102,25 @@ func (m *ClientResponse) GetProducts() string {
 	return ""
 }
 
-type ApiRequest struct {
-	Vendor               string   `protobuf:"bytes,1,opt,name=vendor,proto3" json:"vendor,omitempty"`
-	ProdType             string   `protobuf:"bytes,2,opt,name=prodType,proto3" json:"prodType,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *ApiRequest) Reset()         { *m = ApiRequest{} }
-func (m *ApiRequest) String() string { return proto.CompactTextString(m) }
-func (*ApiRequest) ProtoMessage()    {}
-func (*ApiRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_00212fb1f9d3bf1c, []int{2}
-}
-
-func (m *ApiRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ApiRequest.Unmarshal(m, b)
-}
-func (m *ApiRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ApiRequest.Marshal(b, m, deterministic)
-}
-func (m *ApiRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ApiRequest.Merge(m, src)
-}
-func (m *ApiRequest) XXX_Size() int {
-	return xxx_messageInfo_ApiRequest.Size(m)
-}
-func (m *ApiRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_ApiRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ApiRequest proto.InternalMessageInfo
-
-func (m *ApiRequest) GetVendor() string {
-	if m != nil {
-		return m.Vendor
-	}
-	return ""
-}
-
-func (m *ApiRequest) GetProdType() string {
-	if m != nil {
-		return m.ProdType
-	}
-	return ""
-}
-
-type ApiResponse struct {
-	Prods                []string `protobuf:"bytes,1,rep,name=prods,proto3" json:"prods,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *ApiResponse) Reset()         { *m = ApiResponse{} }
-func (m *ApiResponse) String() string { return proto.CompactTextString(m) }
-func (*ApiResponse) ProtoMessage()    {}
-func (*ApiResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_00212fb1f9d3bf1c, []int{3}
-}
-
-func (m *ApiResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ApiResponse.Unmarshal(m, b)
-}
-func (m *ApiResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ApiResponse.Marshal(b, m, deterministic)
-}
-func (m *ApiResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ApiResponse.Merge(m, src)
-}
-func (m *ApiResponse) XXX_Size() int {
-	return xxx_messageInfo_ApiResponse.Size(m)
-}
-func (m *ApiResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_ApiResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ApiResponse proto.InternalMessageInfo
-
-func (m *ApiResponse) GetProds() []string {
-	if m != nil {
-		return m.Prods
-	}
-	return nil
-}
-
 func init() {
 	proto.RegisterType((*ClientRequest)(nil), "api.ClientRequest")
 	proto.RegisterType((*ClientResponse)(nil), "api.ClientResponse")
-	proto.RegisterType((*ApiRequest)(nil), "api.ApiRequest")
-	proto.RegisterType((*ApiResponse)(nil), "api.ApiResponse")
 }
 
 func init() { proto.RegisterFile("api.proto", fileDescriptor_00212fb1f9d3bf1c) }
 
 var fileDescriptor_00212fb1f9d3bf1c = []byte{
-	// 224 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x90, 0xcd, 0x4e, 0x86, 0x30,
-	0x10, 0x45, 0xf3, 0x49, 0x24, 0x30, 0x04, 0x34, 0xd5, 0x18, 0xc2, 0xca, 0xe0, 0x86, 0x85, 0x61,
-	0x01, 0x2f, 0xa0, 0x60, 0x62, 0xdc, 0x99, 0xea, 0x0b, 0x20, 0xcc, 0xa2, 0x51, 0xdb, 0xda, 0x16,
-	0x12, 0xdf, 0xde, 0xb4, 0xfc, 0x85, 0xb5, 0xcb, 0x73, 0xa7, 0x3d, 0x37, 0x33, 0x10, 0x76, 0x92,
-	0x95, 0x52, 0x09, 0x23, 0x88, 0xd7, 0x49, 0x96, 0xb7, 0x10, 0xb7, 0x5f, 0x0c, 0xb9, 0xa1, 0xf8,
-	0x33, 0xa2, 0x36, 0xe4, 0x06, 0xfc, 0x09, 0xf9, 0x20, 0x54, 0x7a, 0xba, 0x3d, 0x15, 0x21, 0x5d,
-	0x88, 0x64, 0x10, 0x48, 0x25, 0x86, 0xf7, 0x5f, 0x89, 0xe9, 0x99, 0x9b, 0x6c, 0x9c, 0xdf, 0x43,
-	0xb2, 0x4a, 0xb4, 0x14, 0x5c, 0xe3, 0xfa, 0x7a, 0xec, 0x8d, 0x5e, 0x3c, 0x1b, 0xe7, 0x0f, 0x00,
-	0x8f, 0x92, 0xfd, 0xa7, 0xef, 0x0e, 0x22, 0x67, 0x58, 0xca, 0xae, 0xe1, 0xdc, 0x8e, 0x6c, 0x93,
-	0x57, 0x84, 0x74, 0x86, 0xaa, 0x81, 0xe8, 0x55, 0x89, 0xe1, 0x0d, 0xd5, 0xc4, 0x7a, 0x24, 0x35,
-	0x04, 0xcf, 0x68, 0x6c, 0xa2, 0x09, 0x29, 0xed, 0x15, 0x0e, 0x7b, 0x67, 0x57, 0x87, 0x6c, 0x36,
-	0x57, 0x4f, 0x90, 0x34, 0x5d, 0xff, 0x89, 0x7c, 0xd3, 0x54, 0x10, 0x53, 0x34, 0x8a, 0xe1, 0x84,
-	0x2f, 0x06, 0xbf, 0x35, 0xb9, 0x70, 0xff, 0xf6, 0x85, 0xb2, 0xcb, 0x3d, 0x98, 0x2d, 0x1f, 0xbe,
-	0xbb, 0x77, 0xfd, 0x17, 0x00, 0x00, 0xff, 0xff, 0x7e, 0xd5, 0x91, 0x18, 0x7c, 0x01, 0x00, 0x00,
+	// 147 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x4c, 0x2c, 0xc8, 0xd4,
+	0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x4e, 0x2c, 0xc8, 0x54, 0x52, 0xe7, 0xe2, 0x75, 0xce,
+	0xc9, 0x4c, 0xcd, 0x2b, 0x09, 0x4a, 0x2d, 0x2c, 0x4d, 0x2d, 0x2e, 0x11, 0x12, 0xe3, 0x62, 0x2b,
+	0x4b, 0xcd, 0x4b, 0xc9, 0x2f, 0x92, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x0c, 0x82, 0xf2, 0x94, 0x74,
+	0xb8, 0xf8, 0x60, 0x0a, 0x8b, 0x0b, 0xf2, 0xf3, 0x8a, 0x53, 0x85, 0xa4, 0xb8, 0x38, 0x0a, 0x8a,
+	0xf2, 0x53, 0x4a, 0x93, 0x4b, 0x8a, 0xa1, 0x6a, 0xe1, 0x7c, 0x23, 0x27, 0x2e, 0xee, 0x80, 0xa2,
+	0xfc, 0x94, 0xe0, 0xd4, 0xa2, 0xb2, 0xcc, 0xe4, 0x54, 0x21, 0x63, 0x2e, 0x0e, 0xf7, 0xd4, 0x12,
+	0x90, 0x48, 0xb1, 0x90, 0x90, 0x1e, 0xc8, 0x09, 0x28, 0x96, 0x4a, 0x09, 0xa3, 0x88, 0x41, 0xcc,
+	0x4f, 0x62, 0x03, 0x3b, 0xd3, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff, 0xdd, 0x08, 0xf4, 0x4a, 0xb3,
+	0x00, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -297,78 +197,6 @@ var _ProdService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetProds",
 			Handler:    _ProdService_GetProds_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "api.proto",
-}
-
-// BackendServiceClient is the client API for BackendService service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type BackendServiceClient interface {
-	RetrieveItems(ctx context.Context, in *ApiRequest, opts ...grpc.CallOption) (*ApiResponse, error)
-}
-
-type backendServiceClient struct {
-	cc *grpc.ClientConn
-}
-
-func NewBackendServiceClient(cc *grpc.ClientConn) BackendServiceClient {
-	return &backendServiceClient{cc}
-}
-
-func (c *backendServiceClient) RetrieveItems(ctx context.Context, in *ApiRequest, opts ...grpc.CallOption) (*ApiResponse, error) {
-	out := new(ApiResponse)
-	err := c.cc.Invoke(ctx, "/api.BackendService/RetrieveItems", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// BackendServiceServer is the server API for BackendService service.
-type BackendServiceServer interface {
-	RetrieveItems(context.Context, *ApiRequest) (*ApiResponse, error)
-}
-
-// UnimplementedBackendServiceServer can be embedded to have forward compatible implementations.
-type UnimplementedBackendServiceServer struct {
-}
-
-func (*UnimplementedBackendServiceServer) RetrieveItems(ctx context.Context, req *ApiRequest) (*ApiResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RetrieveItems not implemented")
-}
-
-func RegisterBackendServiceServer(s *grpc.Server, srv BackendServiceServer) {
-	s.RegisterService(&_BackendService_serviceDesc, srv)
-}
-
-func _BackendService_RetrieveItems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ApiRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BackendServiceServer).RetrieveItems(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.BackendService/RetrieveItems",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BackendServiceServer).RetrieveItems(ctx, req.(*ApiRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _BackendService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "api.BackendService",
-	HandlerType: (*BackendServiceServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "RetrieveItems",
-			Handler:    _BackendService_RetrieveItems_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

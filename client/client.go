@@ -12,23 +12,22 @@ import (
 )
 
 var (
-	addr    = flag.String("addr", "localhost", "The address of the server to connect to")
-	port    = flag.String("port", "10000", "The port to connect to")
-	vendor  = flag.String("vendor", "google", "Select a cloud Vendor")
-	product = flag.String("product", "", "Select a produc from available options: compute, database")
+	addr   = flag.String("addr", "localhost", "The address of the server to connect to")
+	port   = flag.String("port", "8080", "The port to connect to")
+	vendor = flag.String("vendor", "google", "Select a cloud Vendor")
 )
 
 func main() {
 
 	flag.Parse()
 
-	if err := run(*addr, *port, *vendor, *product); err != nil {
+	if err := run(*addr, *port, *vendor); err != nil {
 		log.Fatalf("could not start the client: %s", err)
 	}
 
 }
 
-func run(addr, port string, vendor string, product string) error {
+func run(addr, port string, vendor string) error {
 	ctx := context.Background()
 
 	conn, err := grpc.DialContext(ctx, net.JoinHostPort(addr, port), grpc.WithInsecure())
@@ -38,8 +37,7 @@ func run(addr, port string, vendor string, product string) error {
 	defer conn.Close()
 
 	requestProd := api.ClientRequest{
-		Vendor:   vendor,
-		ProdType: product,
+		Vendor: vendor,
 	}
 
 	client := api.NewProdServiceClient(conn)
@@ -48,7 +46,7 @@ func run(addr, port string, vendor string, product string) error {
 		return nil
 	}
 
-	fmt.Println(response)
+	fmt.Printf("%s products are: %s\n", vendor, response.GetProducts())
 
 	return nil
 

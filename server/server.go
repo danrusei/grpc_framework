@@ -17,16 +17,18 @@ var (
 )
 
 type server struct {
-	storageAddr string
-	storagePort string
+	prod map[string][]string
 }
 
 func newServer() *server {
-	serv := server{
-		storageAddr: "localhost",
-		storagePort: "6000",
+
+	serv := map[string][]string{
+		"google": []string{"compute", "storage"},
+		"aws":    []string{"compute", "storage"},
+		"oracle": []string{"compute", "storage"},
 	}
-	return &serv
+
+	return &server{prod: serv}
 }
 
 func main() {
@@ -60,27 +62,16 @@ func run(addr string) error {
 //GetProds implement the GRPC server function
 func (serv server) GetProds(ctx context.Context, req *api.ClientRequest) (*api.ClientResponse, error) {
 
-	conn, err := grpc.DialContext(ctx, net.JoinHostPort(serv.storageAddr, serv.storagePort), grpc.WithInsecure())
-	if err != nil {
-		return nil, fmt.Errorf("Failed to dial server:, %s", err)
-	}
-	defer conn.Close()
-
-	storage := api.NewBackendServiceClient(conn)
-
-	itemsRequest := api.ApiRequest{
-		Vendor:   req.Vendor,
-		ProdType: req.ProdType,
-	}
-	itemsResponse, err := storage.RetrieveItems(ctx, &itemsRequest)
-	if err != nil {
-		return nil, fmt.Errorf("wrong RPC request: %v", err)
-	}
-
 	var prods string
 
-	for _, prod := range itemsResponse.Prods {
-		prods = prods + prod
+	if vendorProds, found := serv.prod[req.GetVendor()]; found {
+
+		for _, prod := range vendorProds {
+			prods = prods + " " + prod
+		}
+
+	} else {
+		return nil, fmt.Errorf("vendor unavailable")
 	}
 
 	clientResponse := api.ClientResponse{
