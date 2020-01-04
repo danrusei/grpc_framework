@@ -51,7 +51,7 @@ func run(addr, port string, vendor string) error {
 		return fmt.Errorf("Could not get the products: %v", err)
 	}
 
-	fmt.Printf("%s products are: %s\n", vendor, response.GetProductType())
+	fmt.Printf("%s cloud products type are: %s\n", vendor, response.GetProductType())
 
 	return nil
 

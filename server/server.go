@@ -17,12 +17,12 @@ var (
 )
 
 type server struct {
-	prod map[string][]string
+	prodTypes map[string][]string
 }
 
 func newServer(vendorServ map[string][]string) *server {
 
-	return &server{prod: vendorServ}
+	return &server{prodTypes: vendorServ}
 }
 
 var vendorServices = map[string][]string{
@@ -59,17 +59,17 @@ func run(addr string) error {
 	return nil
 }
 
-//GetProds implement the GRPC server function
+//GetVendorProdTypes implement the GRPC server function
 func (serv server) GetVendorProdTypes(ctx context.Context, req *api.ClientRequestType) (*api.ClientResponseType, error) {
 
 	log.Printf("have received a request for -> %s <- as vendor", req.GetVendor())
 
-	var prods string
+	var prodTypes string
 
-	if vendorProds, found := serv.prod[req.GetVendor()]; found {
+	if vendorProdTypes, found := serv.prodTypes[req.GetVendor()]; found {
 
-		for _, prod := range vendorProds {
-			prods = prods + " " + prod
+		for _, prodType := range vendorProdTypes {
+			prodTypes = prodTypes + " " + prodType
 		}
 
 	} else {
@@ -77,7 +77,7 @@ func (serv server) GetVendorProdTypes(ctx context.Context, req *api.ClientReques
 	}
 
 	clientResponse := api.ClientResponseType{
-		ProductType: prods,
+		ProductType: prodTypes,
 	}
 
 	return &clientResponse, nil
