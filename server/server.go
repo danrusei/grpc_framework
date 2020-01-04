@@ -6,10 +6,13 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"time"
 
 	api "github.com/Danr17/grpc_framework/proto"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 var (
@@ -73,12 +76,27 @@ func (serv server) GetVendorProdTypes(ctx context.Context, req *api.ClientReques
 		}
 
 	} else {
-		return nil, fmt.Errorf("wrong vendor, select between google, aws, oracle")
+		return nil, status.Errorf(codes.InvalidArgument, "wrong vendor, select between google, aws, oracle")
+	}
+
+	// some heavy processing **increase it ** if you want to test out DeadlineExceeded
+	time.Sleep(2 * time.Second)
+
+	if ctx.Err() == context.DeadlineExceeded {
+		log.Printf("dealine has exceeded, stoping server side operation")
+		return nil, status.Error(codes.DeadlineExceeded, "dealine has exceeded, stoping server side operation")
+	}
+
+	if ctx.Err() == context.Canceled {
+		log.Print("the user has canceled the request, stoping server side operation")
+		return nil, status.Error(codes.Canceled, "the user has canceled the request, stoping server side operation")
 	}
 
 	clientResponse := api.ClientResponseType{
 		ProductType: prodTypes,
 	}
+
+	log.Printf("the response is sent to client: %s", prodTypes)
 
 	return &clientResponse, nil
 }

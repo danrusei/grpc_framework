@@ -7,6 +7,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"time"
 
 	api "github.com/Danr17/grpc_framework/proto"
 	"google.golang.org/grpc"
@@ -35,7 +36,8 @@ func main() {
 
 	client := api.NewProdServiceClient(conn)
 
-	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(context.Background(), 4*time.Second)
+	defer cancel()
 
 	switch cmd := flag.Arg(0); cmd {
 	case "getprodtypes":
