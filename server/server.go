@@ -12,6 +12,7 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/status"
 )
 
@@ -49,7 +50,15 @@ func run(addr string) error {
 		return fmt.Errorf("could not listen on the port %s: %s", addr, err)
 	}
 
-	srv := grpc.NewServer()
+	creds, err := credentials.NewServerTLSFromFile("../cert/service.pem", "../cert/service.key")
+	if err != nil {
+		return fmt.Errorf("could not process the credentials: %v", err)
+	}
+
+	// Create an array of gRPC options with the credentials
+	opts := []grpc.ServerOption{grpc.Creds(creds)}
+
+	srv := grpc.NewServer(opts...)
 
 	api.RegisterProdServiceServer(srv, newServer(vendorServices))
 

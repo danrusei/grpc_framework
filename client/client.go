@@ -11,6 +11,7 @@ import (
 
 	api "github.com/Danr17/grpc_framework/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 )
 
 var (
@@ -27,7 +28,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	conn, err := grpc.Dial(net.JoinHostPort(*addr, *port), grpc.WithInsecure())
+	creds, err := credentials.NewClientTLSFromFile("../cert/service.pem", "")
+	if err != nil {
+		log.Fatalf("could not process the credentials: %v", err)
+	}
+
+	conn, err := grpc.Dial(net.JoinHostPort(*addr, *port), grpc.WithTransportCredentials(creds))
 	if err != nil {
 		log.Fatalf("Failed to dial server:, %s", err)
 
