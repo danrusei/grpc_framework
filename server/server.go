@@ -20,15 +20,15 @@ type server struct {
 	prod map[string][]string
 }
 
-func newServer() *server {
+func newServer(vendorServ map[string][]string) *server {
 
-	serv := map[string][]string{
-		"google": []string{"google_compute", "google_storage"},
-		"aws":    []string{"aws_compute", "aws_storage"},
-		"oracle": []string{"oracle_compute", "oracle_storage"},
-	}
+	return &server{prod: vendorServ}
+}
 
-	return &server{prod: serv}
+var vendorServices = map[string][]string{
+	"google": []string{"google_compute", "google_storage"},
+	"aws":    []string{"aws_compute", "aws_storage"},
+	"oracle": []string{"oracle_compute", "oracle_storage"},
 }
 
 func main() {
@@ -48,7 +48,7 @@ func run(addr string) error {
 
 	srv := grpc.NewServer()
 
-	api.RegisterProdServiceServer(srv, newServer())
+	api.RegisterProdServiceServer(srv, newServer(vendorServices))
 
 	log.Printf("Serving gRPC on https://%s", addr)
 
@@ -61,6 +61,8 @@ func run(addr string) error {
 
 //GetProds implement the GRPC server function
 func (serv server) GetProds(ctx context.Context, req *api.ClientRequest) (*api.ClientResponse, error) {
+
+	log.Printf("have received a request for -> %s <- as vendor", req.GetVendor())
 
 	var prods string
 
