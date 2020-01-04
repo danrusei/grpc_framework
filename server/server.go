@@ -60,7 +60,7 @@ func run(addr string) error {
 }
 
 //GetProds implement the GRPC server function
-func (serv server) GetProds(ctx context.Context, req *api.ClientRequest) (*api.ClientResponse, error) {
+func (serv server) GetVendorProdTypes(ctx context.Context, req *api.ClientRequestType) (*api.ClientResponseType, error) {
 
 	log.Printf("have received a request for -> %s <- as vendor", req.GetVendor())
 
@@ -76,8 +76,8 @@ func (serv server) GetProds(ctx context.Context, req *api.ClientRequest) (*api.C
 		return nil, fmt.Errorf("wrong vendor selection")
 	}
 
-	clientResponse := api.ClientResponse{
-		Products: prods,
+	clientResponse := api.ClientResponseType{
+		ProductType: prods,
 	}
 
 	return &clientResponse, nil

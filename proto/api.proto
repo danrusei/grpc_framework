@@ -3,13 +3,13 @@ syntax = "proto3";
 package api;
 
 service ProdService {
-    rpc GetProds(ClientRequest) returns (ClientResponse);
+    rpc GetVendorProdTypes(ClientRequestType) returns (ClientResponseType);
 }
 
-message ClientRequest {
+message ClientRequestType {
     string vendor = 1;
 }
 
-message ClientResponse {
-    string products = 1;
+message ClientResponseType {
+    string productType = 1;
 }

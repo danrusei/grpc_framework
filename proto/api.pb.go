@@ -24,103 +24,103 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-type ClientRequest struct {
+type ClientRequestType struct {
 	Vendor               string   `protobuf:"bytes,1,opt,name=vendor,proto3" json:"vendor,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ClientRequest) Reset()         { *m = ClientRequest{} }
-func (m *ClientRequest) String() string { return proto.CompactTextString(m) }
-func (*ClientRequest) ProtoMessage()    {}
-func (*ClientRequest) Descriptor() ([]byte, []int) {
+func (m *ClientRequestType) Reset()         { *m = ClientRequestType{} }
+func (m *ClientRequestType) String() string { return proto.CompactTextString(m) }
+func (*ClientRequestType) ProtoMessage()    {}
+func (*ClientRequestType) Descriptor() ([]byte, []int) {
 	return fileDescriptor_00212fb1f9d3bf1c, []int{0}
 }
 
-func (m *ClientRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ClientRequest.Unmarshal(m, b)
+func (m *ClientRequestType) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ClientRequestType.Unmarshal(m, b)
 }
-func (m *ClientRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ClientRequest.Marshal(b, m, deterministic)
+func (m *ClientRequestType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ClientRequestType.Marshal(b, m, deterministic)
 }
-func (m *ClientRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ClientRequest.Merge(m, src)
+func (m *ClientRequestType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClientRequestType.Merge(m, src)
 }
-func (m *ClientRequest) XXX_Size() int {
-	return xxx_messageInfo_ClientRequest.Size(m)
+func (m *ClientRequestType) XXX_Size() int {
+	return xxx_messageInfo_ClientRequestType.Size(m)
 }
-func (m *ClientRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_ClientRequest.DiscardUnknown(m)
+func (m *ClientRequestType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ClientRequestType.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_ClientRequest proto.InternalMessageInfo
+var xxx_messageInfo_ClientRequestType proto.InternalMessageInfo
 
-func (m *ClientRequest) GetVendor() string {
+func (m *ClientRequestType) GetVendor() string {
 	if m != nil {
 		return m.Vendor
 	}
 	return ""
 }
 
-type ClientResponse struct {
-	Products             string   `protobuf:"bytes,1,opt,name=products,proto3" json:"products,omitempty"`
+type ClientResponseType struct {
+	ProductType          string   `protobuf:"bytes,1,opt,name=productType,proto3" json:"productType,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ClientResponse) Reset()         { *m = ClientResponse{} }
-func (m *ClientResponse) String() string { return proto.CompactTextString(m) }
-func (*ClientResponse) ProtoMessage()    {}
-func (*ClientResponse) Descriptor() ([]byte, []int) {
+func (m *ClientResponseType) Reset()         { *m = ClientResponseType{} }
+func (m *ClientResponseType) String() string { return proto.CompactTextString(m) }
+func (*ClientResponseType) ProtoMessage()    {}
+func (*ClientResponseType) Descriptor() ([]byte, []int) {
 	return fileDescriptor_00212fb1f9d3bf1c, []int{1}
 }
 
-func (m *ClientResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ClientResponse.Unmarshal(m, b)
+func (m *ClientResponseType) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ClientResponseType.Unmarshal(m, b)
 }
-func (m *ClientResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ClientResponse.Marshal(b, m, deterministic)
+func (m *ClientResponseType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ClientResponseType.Marshal(b, m, deterministic)
 }
-func (m *ClientResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ClientResponse.Merge(m, src)
+func (m *ClientResponseType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClientResponseType.Merge(m, src)
 }
-func (m *ClientResponse) XXX_Size() int {
-	return xxx_messageInfo_ClientResponse.Size(m)
+func (m *ClientResponseType) XXX_Size() int {
+	return xxx_messageInfo_ClientResponseType.Size(m)
 }
-func (m *ClientResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_ClientResponse.DiscardUnknown(m)
+func (m *ClientResponseType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ClientResponseType.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_ClientResponse proto.InternalMessageInfo
+var xxx_messageInfo_ClientResponseType proto.InternalMessageInfo
 
-func (m *ClientResponse) GetProducts() string {
+func (m *ClientResponseType) GetProductType() string {
 	if m != nil {
-		return m.Products
+		return m.ProductType
 	}
 	return ""
 }
 
 func init() {
-	proto.RegisterType((*ClientRequest)(nil), "api.ClientRequest")
-	proto.RegisterType((*ClientResponse)(nil), "api.ClientResponse")
+	proto.RegisterType((*ClientRequestType)(nil), "api.ClientRequestType")
+	proto.RegisterType((*ClientResponseType)(nil), "api.ClientResponseType")
 }
 
 func init() { proto.RegisterFile("api.proto", fileDescriptor_00212fb1f9d3bf1c) }
 
 var fileDescriptor_00212fb1f9d3bf1c = []byte{
-	// 147 bytes of a gzipped FileDescriptorProto
+	// 158 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x4c, 0x2c, 0xc8, 0xd4,
-	0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x4e, 0x2c, 0xc8, 0x54, 0x52, 0xe7, 0xe2, 0x75, 0xce,
-	0xc9, 0x4c, 0xcd, 0x2b, 0x09, 0x4a, 0x2d, 0x2c, 0x4d, 0x2d, 0x2e, 0x11, 0x12, 0xe3, 0x62, 0x2b,
-	0x4b, 0xcd, 0x4b, 0xc9, 0x2f, 0x92, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x0c, 0x82, 0xf2, 0x94, 0x74,
-	0xb8, 0xf8, 0x60, 0x0a, 0x8b, 0x0b, 0xf2, 0xf3, 0x8a, 0x53, 0x85, 0xa4, 0xb8, 0x38, 0x0a, 0x8a,
-	0xf2, 0x53, 0x4a, 0x93, 0x4b, 0x8a, 0xa1, 0x6a, 0xe1, 0x7c, 0x23, 0x27, 0x2e, 0xee, 0x80, 0xa2,
-	0xfc, 0x94, 0xe0, 0xd4, 0xa2, 0xb2, 0xcc, 0xe4, 0x54, 0x21, 0x63, 0x2e, 0x0e, 0xf7, 0xd4, 0x12,
-	0x90, 0x48, 0xb1, 0x90, 0x90, 0x1e, 0xc8, 0x09, 0x28, 0x96, 0x4a, 0x09, 0xa3, 0x88, 0x41, 0xcc,
-	0x4f, 0x62, 0x03, 0x3b, 0xd3, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff, 0xdd, 0x08, 0xf4, 0x4a, 0xb3,
-	0x00, 0x00, 0x00,
+	0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x4e, 0x2c, 0xc8, 0x54, 0xd2, 0xe6, 0x12, 0x74, 0xce,
+	0xc9, 0x4c, 0xcd, 0x2b, 0x09, 0x4a, 0x2d, 0x2c, 0x4d, 0x2d, 0x2e, 0x09, 0xa9, 0x2c, 0x48, 0x15,
+	0x12, 0xe3, 0x62, 0x2b, 0x4b, 0xcd, 0x4b, 0xc9, 0x2f, 0x92, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x0c,
+	0x82, 0xf2, 0x94, 0xcc, 0xb8, 0x84, 0x60, 0x8a, 0x8b, 0x0b, 0xf2, 0xf3, 0x8a, 0x53, 0xc1, 0xaa,
+	0x15, 0xb8, 0xb8, 0x0b, 0x8a, 0xf2, 0x53, 0x4a, 0x93, 0xc1, 0x9a, 0xa1, 0x5a, 0x90, 0x85, 0x8c,
+	0x42, 0xb8, 0xb8, 0x03, 0x8a, 0xf2, 0x53, 0x82, 0x53, 0x8b, 0xca, 0x32, 0x93, 0x53, 0x85, 0x5c,
+	0xb9, 0x84, 0xdc, 0x53, 0x4b, 0xc2, 0xc0, 0x66, 0x82, 0xc4, 0x41, 0x6a, 0x8a, 0x85, 0xc4, 0xf4,
+	0x40, 0x4e, 0xc3, 0x70, 0x8c, 0x94, 0x38, 0x8a, 0x38, 0xc2, 0xde, 0x24, 0x36, 0xb0, 0x37, 0x8c,
+	0x01, 0x01, 0x00, 0x00, 0xff, 0xff, 0x27, 0xc0, 0xf7, 0xd9, 0xd3, 0x00, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -135,7 +135,7 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type ProdServiceClient interface {
-	GetProds(ctx context.Context, in *ClientRequest, opts ...grpc.CallOption) (*ClientResponse, error)
+	GetVendorProdTypes(ctx context.Context, in *ClientRequestType, opts ...grpc.CallOption) (*ClientResponseType, error)
 }
 
 type prodServiceClient struct {
@@ -146,9 +146,9 @@ func NewProdServiceClient(cc *grpc.ClientConn) ProdServiceClient {
 	return &prodServiceClient{cc}
 }
 
-func (c *prodServiceClient) GetProds(ctx context.Context, in *ClientRequest, opts ...grpc.CallOption) (*ClientResponse, error) {
-	out := new(ClientResponse)
-	err := c.cc.Invoke(ctx, "/api.ProdService/GetProds", in, out, opts...)
+func (c *prodServiceClient) GetVendorProdTypes(ctx context.Context, in *ClientRequestType, opts ...grpc.CallOption) (*ClientResponseType, error) {
+	out := new(ClientResponseType)
+	err := c.cc.Invoke(ctx, "/api.ProdService/GetVendorProdTypes", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -157,35 +157,35 @@ func (c *prodServiceClient) GetProds(ctx context.Context, in *ClientRequest, opt
 
 // ProdServiceServer is the server API for ProdService service.
 type ProdServiceServer interface {
-	GetProds(context.Context, *ClientRequest) (*ClientResponse, error)
+	GetVendorProdTypes(context.Context, *ClientRequestType) (*ClientResponseType, error)
 }
 
 // UnimplementedProdServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedProdServiceServer struct {
 }
 
-func (*UnimplementedProdServiceServer) GetProds(ctx context.Context, req *ClientRequest) (*ClientResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetProds not implemented")
+func (*UnimplementedProdServiceServer) GetVendorProdTypes(ctx context.Context, req *ClientRequestType) (*ClientResponseType, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetVendorProdTypes not implemented")
 }
 
 func RegisterProdServiceServer(s *grpc.Server, srv ProdServiceServer) {
 	s.RegisterService(&_ProdService_serviceDesc, srv)
 }
 
-func _ProdService_GetProds_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ClientRequest)
+func _ProdService_GetVendorProdTypes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ClientRequestType)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ProdServiceServer).GetProds(ctx, in)
+		return srv.(ProdServiceServer).GetVendorProdTypes(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.ProdService/GetProds",
+		FullMethod: "/api.ProdService/GetVendorProdTypes",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProdServiceServer).GetProds(ctx, req.(*ClientRequest))
+		return srv.(ProdServiceServer).GetVendorProdTypes(ctx, req.(*ClientRequestType))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -195,8 +195,8 @@ var _ProdService_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*ProdServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetProds",
-			Handler:    _ProdService_GetProds_Handler,
+			MethodName: "GetVendorProdTypes",
+			Handler:    _ProdService_GetVendorProdTypes_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

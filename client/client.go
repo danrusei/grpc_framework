@@ -41,17 +41,17 @@ func run(addr, port string, vendor string) error {
 	}
 	defer conn.Close()
 
-	requestProd := api.ClientRequest{
+	requestProd := api.ClientRequestType{
 		Vendor: vendor,
 	}
 
 	client := api.NewProdServiceClient(conn)
-	response, err := client.GetProds(ctx, &requestProd)
+	response, err := client.GetVendorProdTypes(ctx, &requestProd)
 	if err != nil {
 		return fmt.Errorf("Could not get the products: %v", err)
 	}
 
-	fmt.Printf("%s products are: %s\n", vendor, response.GetProducts())
+	fmt.Printf("%s products are: %s\n", vendor, response.GetProductType())
 
 	return nil
 
