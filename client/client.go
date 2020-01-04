@@ -13,10 +13,8 @@ import (
 )
 
 var (
-	addr   = flag.String("addr", "localhost", "The address of the server to connect to")
-	port   = flag.String("port", "8080", "The port to connect to")
-	vendor = flag.String("vendor", "", "Select a vendor")
-	pType  = flag.String("ptype", "", "Select a product type")
+	addr = flag.String("addr", "localhost", "The address of the server to connect to")
+	port = flag.String("port", "8080", "The port to connect to")
 )
 
 func main() {
@@ -41,7 +39,7 @@ func main() {
 
 	switch cmd := flag.Arg(0); cmd {
 	case "getprodtypes":
-		err = getprodtypes(ctx, client, *vendor)
+		err = getprodtypes(ctx, client, flag.Arg(1))
 	default:
 		err = fmt.Errorf("unknown subcommand %s", cmd)
 	}
@@ -55,7 +53,7 @@ func main() {
 func getprodtypes(ctx context.Context, client api.ProdServiceClient, vendor string) error {
 
 	if vendor == "" {
-		return fmt.Errorf("Vendor flag is missing, select between available cloud vendors: google, aws, oracle")
+		return fmt.Errorf("Vendor arg is missing, select between available cloud vendors: google, aws, oracle")
 	}
 
 	requestProd := api.ClientRequestType{

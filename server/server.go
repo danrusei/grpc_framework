@@ -73,7 +73,7 @@ func (serv server) GetVendorProdTypes(ctx context.Context, req *api.ClientReques
 		}
 
 	} else {
-		return nil, fmt.Errorf("wrong vendor selection")
+		return nil, fmt.Errorf("wrong vendor, select between google, aws, oracle")
 	}
 
 	clientResponse := api.ClientResponseType{
