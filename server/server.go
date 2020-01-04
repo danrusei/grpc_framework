@@ -26,9 +26,9 @@ func newServer(vendorServ map[string][]string) *server {
 }
 
 var vendorServices = map[string][]string{
-	"google": []string{"google_compute", "google_storage"},
-	"aws":    []string{"aws_compute", "aws_storage"},
-	"oracle": []string{"oracle_compute", "oracle_storage"},
+	"google": []string{"compute", "storage"},
+	"aws":    []string{"compute", "storage"},
+	"oracle": []string{"compute", "storage"},
 }
 
 func main() {
