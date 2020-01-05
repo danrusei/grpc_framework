@@ -109,3 +109,10 @@ func (serv server) GetVendorProdTypes(ctx context.Context, req *api.ClientReques
 
 	return &clientResponse, nil
 }
+
+func (serv server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdService_GetVendorProdsServer) error {
+
+	log.Printf("have received a request for -> %s <- product type from -> %s <- vendor", req.GetProductType(), req.GetVendor())
+
+	return nil
+}

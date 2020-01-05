@@ -22,20 +22,23 @@ class Storage(api_pb2_grpc.StorageServiceServicer):
         vendor = request.vendor.lower()
         product_type = request.productType.lower()
 
-        prods = get_prods(vendor, product_type)
+        prod_type_list = get_prods(vendor, product_type)
 
+        product = api_pb2.Product()
         response = api_pb2.StorageResponse()
-        response.prodDetail.extend(prods)
+
+        for prod in prod_type_list:
+            product.title = prod["title"]
+            product.url = prod["url"]
+            response.prodDetail.extend(product)
 
         return response
 
 def get_prods(vendor, product_type):
 
-    selected = []
-
     if vendor in vendors.keys():
         if product_type in vendors[vendor].keys():
-            selected = vendors[vendor][product_type]
+            return vendors[vendor][product_type]
         else:
             return "No Product Type"
     else:
