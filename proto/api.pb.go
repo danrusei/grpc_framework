@@ -102,25 +102,317 @@ func (m *ClientResponseType) GetProductType() string {
 	return ""
 }
 
+type ClientRequestProds struct {
+	Vendor               string   `protobuf:"bytes,1,opt,name=vendor,proto3" json:"vendor,omitempty"`
+	ProductType          string   `protobuf:"bytes,2,opt,name=productType,proto3" json:"productType,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ClientRequestProds) Reset()         { *m = ClientRequestProds{} }
+func (m *ClientRequestProds) String() string { return proto.CompactTextString(m) }
+func (*ClientRequestProds) ProtoMessage()    {}
+func (*ClientRequestProds) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{2}
+}
+
+func (m *ClientRequestProds) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ClientRequestProds.Unmarshal(m, b)
+}
+func (m *ClientRequestProds) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ClientRequestProds.Marshal(b, m, deterministic)
+}
+func (m *ClientRequestProds) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClientRequestProds.Merge(m, src)
+}
+func (m *ClientRequestProds) XXX_Size() int {
+	return xxx_messageInfo_ClientRequestProds.Size(m)
+}
+func (m *ClientRequestProds) XXX_DiscardUnknown() {
+	xxx_messageInfo_ClientRequestProds.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ClientRequestProds proto.InternalMessageInfo
+
+func (m *ClientRequestProds) GetVendor() string {
+	if m != nil {
+		return m.Vendor
+	}
+	return ""
+}
+
+func (m *ClientRequestProds) GetProductType() string {
+	if m != nil {
+		return m.ProductType
+	}
+	return ""
+}
+
+type ClientResponseProds struct {
+	Product              *ProdsPrep `protobuf:"bytes,1,opt,name=product,proto3" json:"product,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
+}
+
+func (m *ClientResponseProds) Reset()         { *m = ClientResponseProds{} }
+func (m *ClientResponseProds) String() string { return proto.CompactTextString(m) }
+func (*ClientResponseProds) ProtoMessage()    {}
+func (*ClientResponseProds) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{3}
+}
+
+func (m *ClientResponseProds) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ClientResponseProds.Unmarshal(m, b)
+}
+func (m *ClientResponseProds) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ClientResponseProds.Marshal(b, m, deterministic)
+}
+func (m *ClientResponseProds) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClientResponseProds.Merge(m, src)
+}
+func (m *ClientResponseProds) XXX_Size() int {
+	return xxx_messageInfo_ClientResponseProds.Size(m)
+}
+func (m *ClientResponseProds) XXX_DiscardUnknown() {
+	xxx_messageInfo_ClientResponseProds.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ClientResponseProds proto.InternalMessageInfo
+
+func (m *ClientResponseProds) GetProduct() *ProdsPrep {
+	if m != nil {
+		return m.Product
+	}
+	return nil
+}
+
+type ProdsPrep struct {
+	Title                string   `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
+	Url                  string   `protobuf:"bytes,2,opt,name=url,proto3" json:"url,omitempty"`
+	ShortUrl             string   `protobuf:"bytes,3,opt,name=shortUrl,proto3" json:"shortUrl,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ProdsPrep) Reset()         { *m = ProdsPrep{} }
+func (m *ProdsPrep) String() string { return proto.CompactTextString(m) }
+func (*ProdsPrep) ProtoMessage()    {}
+func (*ProdsPrep) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{4}
+}
+
+func (m *ProdsPrep) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ProdsPrep.Unmarshal(m, b)
+}
+func (m *ProdsPrep) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ProdsPrep.Marshal(b, m, deterministic)
+}
+func (m *ProdsPrep) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProdsPrep.Merge(m, src)
+}
+func (m *ProdsPrep) XXX_Size() int {
+	return xxx_messageInfo_ProdsPrep.Size(m)
+}
+func (m *ProdsPrep) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProdsPrep.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProdsPrep proto.InternalMessageInfo
+
+func (m *ProdsPrep) GetTitle() string {
+	if m != nil {
+		return m.Title
+	}
+	return ""
+}
+
+func (m *ProdsPrep) GetUrl() string {
+	if m != nil {
+		return m.Url
+	}
+	return ""
+}
+
+func (m *ProdsPrep) GetShortUrl() string {
+	if m != nil {
+		return m.ShortUrl
+	}
+	return ""
+}
+
+type StorageRequest struct {
+	Vendor               string   `protobuf:"bytes,1,opt,name=vendor,proto3" json:"vendor,omitempty"`
+	ProductType          string   `protobuf:"bytes,2,opt,name=productType,proto3" json:"productType,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *StorageRequest) Reset()         { *m = StorageRequest{} }
+func (m *StorageRequest) String() string { return proto.CompactTextString(m) }
+func (*StorageRequest) ProtoMessage()    {}
+func (*StorageRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{5}
+}
+
+func (m *StorageRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_StorageRequest.Unmarshal(m, b)
+}
+func (m *StorageRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_StorageRequest.Marshal(b, m, deterministic)
+}
+func (m *StorageRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageRequest.Merge(m, src)
+}
+func (m *StorageRequest) XXX_Size() int {
+	return xxx_messageInfo_StorageRequest.Size(m)
+}
+func (m *StorageRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageRequest proto.InternalMessageInfo
+
+func (m *StorageRequest) GetVendor() string {
+	if m != nil {
+		return m.Vendor
+	}
+	return ""
+}
+
+func (m *StorageRequest) GetProductType() string {
+	if m != nil {
+		return m.ProductType
+	}
+	return ""
+}
+
+type StorageResponse struct {
+	ProdDetail           []*Product `protobuf:"bytes,1,rep,name=prodDetail,proto3" json:"prodDetail,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
+}
+
+func (m *StorageResponse) Reset()         { *m = StorageResponse{} }
+func (m *StorageResponse) String() string { return proto.CompactTextString(m) }
+func (*StorageResponse) ProtoMessage()    {}
+func (*StorageResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{6}
+}
+
+func (m *StorageResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_StorageResponse.Unmarshal(m, b)
+}
+func (m *StorageResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_StorageResponse.Marshal(b, m, deterministic)
+}
+func (m *StorageResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StorageResponse.Merge(m, src)
+}
+func (m *StorageResponse) XXX_Size() int {
+	return xxx_messageInfo_StorageResponse.Size(m)
+}
+func (m *StorageResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_StorageResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StorageResponse proto.InternalMessageInfo
+
+func (m *StorageResponse) GetProdDetail() []*Product {
+	if m != nil {
+		return m.ProdDetail
+	}
+	return nil
+}
+
+type Product struct {
+	Title                string   `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
+	Url                  string   `protobuf:"bytes,2,opt,name=url,proto3" json:"url,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Product) Reset()         { *m = Product{} }
+func (m *Product) String() string { return proto.CompactTextString(m) }
+func (*Product) ProtoMessage()    {}
+func (*Product) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{7}
+}
+
+func (m *Product) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Product.Unmarshal(m, b)
+}
+func (m *Product) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Product.Marshal(b, m, deterministic)
+}
+func (m *Product) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Product.Merge(m, src)
+}
+func (m *Product) XXX_Size() int {
+	return xxx_messageInfo_Product.Size(m)
+}
+func (m *Product) XXX_DiscardUnknown() {
+	xxx_messageInfo_Product.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Product proto.InternalMessageInfo
+
+func (m *Product) GetTitle() string {
+	if m != nil {
+		return m.Title
+	}
+	return ""
+}
+
+func (m *Product) GetUrl() string {
+	if m != nil {
+		return m.Url
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*ClientRequestType)(nil), "api.ClientRequestType")
 	proto.RegisterType((*ClientResponseType)(nil), "api.ClientResponseType")
+	proto.RegisterType((*ClientRequestProds)(nil), "api.ClientRequestProds")
+	proto.RegisterType((*ClientResponseProds)(nil), "api.ClientResponseProds")
+	proto.RegisterType((*ProdsPrep)(nil), "api.ProdsPrep")
+	proto.RegisterType((*StorageRequest)(nil), "api.StorageRequest")
+	proto.RegisterType((*StorageResponse)(nil), "api.StorageResponse")
+	proto.RegisterType((*Product)(nil), "api.Product")
 }
 
 func init() { proto.RegisterFile("api.proto", fileDescriptor_00212fb1f9d3bf1c) }
 
 var fileDescriptor_00212fb1f9d3bf1c = []byte{
-	// 158 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x4c, 0x2c, 0xc8, 0xd4,
-	0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x4e, 0x2c, 0xc8, 0x54, 0xd2, 0xe6, 0x12, 0x74, 0xce,
-	0xc9, 0x4c, 0xcd, 0x2b, 0x09, 0x4a, 0x2d, 0x2c, 0x4d, 0x2d, 0x2e, 0x09, 0xa9, 0x2c, 0x48, 0x15,
-	0x12, 0xe3, 0x62, 0x2b, 0x4b, 0xcd, 0x4b, 0xc9, 0x2f, 0x92, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x0c,
-	0x82, 0xf2, 0x94, 0xcc, 0xb8, 0x84, 0x60, 0x8a, 0x8b, 0x0b, 0xf2, 0xf3, 0x8a, 0x53, 0xc1, 0xaa,
-	0x15, 0xb8, 0xb8, 0x0b, 0x8a, 0xf2, 0x53, 0x4a, 0x93, 0xc1, 0x9a, 0xa1, 0x5a, 0x90, 0x85, 0x8c,
-	0x42, 0xb8, 0xb8, 0x03, 0x8a, 0xf2, 0x53, 0x82, 0x53, 0x8b, 0xca, 0x32, 0x93, 0x53, 0x85, 0x5c,
-	0xb9, 0x84, 0xdc, 0x53, 0x4b, 0xc2, 0xc0, 0x66, 0x82, 0xc4, 0x41, 0x6a, 0x8a, 0x85, 0xc4, 0xf4,
-	0x40, 0x4e, 0xc3, 0x70, 0x8c, 0x94, 0x38, 0x8a, 0x38, 0xc2, 0xde, 0x24, 0x36, 0xb0, 0x37, 0x8c,
-	0x01, 0x01, 0x00, 0x00, 0xff, 0xff, 0x27, 0xc0, 0xf7, 0xd9, 0xd3, 0x00, 0x00, 0x00,
+	// 341 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x52, 0x4d, 0x4b, 0xc3, 0x40,
+	0x10, 0x25, 0x06, 0x5b, 0x3b, 0x91, 0xaa, 0xd3, 0xd2, 0x86, 0x9c, 0x4a, 0x4e, 0x05, 0xa5, 0x68,
+	0x04, 0x2f, 0x1e, 0x3c, 0x68, 0x11, 0x04, 0xb5, 0xa4, 0xea, 0x3d, 0xb6, 0x83, 0x06, 0x42, 0x77,
+	0xdd, 0xdd, 0x14, 0xfc, 0x2d, 0xfe, 0x59, 0xc9, 0xe4, 0xc3, 0xc6, 0x28, 0x08, 0xde, 0x32, 0xef,
+	0xcd, 0xbc, 0x79, 0x2f, 0x3b, 0xd0, 0x89, 0x64, 0x3c, 0x91, 0x4a, 0x18, 0x81, 0x76, 0x24, 0x63,
+	0xff, 0x10, 0x0e, 0x2e, 0x93, 0x98, 0x56, 0x26, 0xa4, 0xb7, 0x94, 0xb4, 0x79, 0x78, 0x97, 0x84,
+	0x03, 0x68, 0xad, 0x69, 0xb5, 0x14, 0xca, 0xb5, 0x46, 0xd6, 0xb8, 0x13, 0x16, 0x95, 0x7f, 0x06,
+	0x58, 0x36, 0x6b, 0x29, 0x56, 0x9a, 0xb8, 0x7b, 0x04, 0x8e, 0x54, 0x62, 0x99, 0x2e, 0x78, 0xb8,
+	0x18, 0xd9, 0x84, 0xfc, 0xbb, 0xaf, 0x39, 0x5e, 0x32, 0x53, 0x62, 0xa9, 0x7f, 0xdb, 0xf2, 0x5d,
+	0x6f, 0xab, 0xa9, 0x77, 0x01, 0xbd, 0xba, 0x8f, 0x5c, 0x70, 0x0c, 0xed, 0xa2, 0x8b, 0x15, 0x9d,
+	0xa0, 0x3b, 0xc9, 0xd2, 0x32, 0x39, 0x53, 0x24, 0xc3, 0x92, 0xf6, 0xef, 0xa1, 0x53, 0xa1, 0xd8,
+	0x87, 0x6d, 0x13, 0x9b, 0xa4, 0x74, 0x9e, 0x17, 0xb8, 0x0f, 0x76, 0xaa, 0x92, 0x62, 0x7b, 0xf6,
+	0x89, 0x1e, 0xec, 0xe8, 0x57, 0xa1, 0xcc, 0xa3, 0x4a, 0x5c, 0x9b, 0xe1, 0xaa, 0xf6, 0x6f, 0xa0,
+	0x3b, 0x37, 0x42, 0x45, 0x2f, 0x54, 0x44, 0xfc, 0x57, 0xba, 0xbd, 0x4a, 0x2b, 0x8f, 0x87, 0x47,
+	0x00, 0x59, 0xc7, 0x15, 0x99, 0x28, 0x4e, 0x5c, 0x6b, 0x64, 0x8f, 0x9d, 0x60, 0xb7, 0x0a, 0x97,
+	0x2e, 0x4c, 0xb8, 0xc1, 0xfb, 0x27, 0xd0, 0x2e, 0xe0, 0xbf, 0x66, 0x0b, 0x3e, 0x2c, 0x70, 0xb2,
+	0x99, 0x39, 0xa9, 0x75, 0xbc, 0x20, 0x9c, 0x02, 0x5e, 0x93, 0x79, 0x62, 0xcb, 0x19, 0x9e, 0x19,
+	0xd3, 0x38, 0xe0, 0x95, 0x8d, 0x7b, 0xf1, 0x86, 0x35, 0x7c, 0xe3, 0x34, 0xa6, 0xd0, 0xad, 0xc9,
+	0x68, 0x1c, 0x36, 0x25, 0x98, 0xf0, 0xdc, 0x1f, 0x34, 0x98, 0x39, 0xb6, 0x82, 0xdb, 0xea, 0xef,
+	0x96, 0xfe, 0xce, 0x59, 0x98, 0xf9, 0x3c, 0x34, 0xf6, 0x78, 0xbe, 0xfe, 0x08, 0x5e, 0xbf, 0x0e,
+	0xe6, 0xaa, 0xcf, 0x2d, 0xbe, 0xff, 0xd3, 0xcf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x98, 0x52, 0x97,
+	0xc0, 0x0c, 0x03, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -136,6 +428,7 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type ProdServiceClient interface {
 	GetVendorProdTypes(ctx context.Context, in *ClientRequestType, opts ...grpc.CallOption) (*ClientResponseType, error)
+	GetVendorProds(ctx context.Context, in *ClientRequestProds, opts ...grpc.CallOption) (ProdService_GetVendorProdsClient, error)
 }
 
 type prodServiceClient struct {
@@ -155,9 +448,42 @@ func (c *prodServiceClient) GetVendorProdTypes(ctx context.Context, in *ClientRe
 	return out, nil
 }
 
+func (c *prodServiceClient) GetVendorProds(ctx context.Context, in *ClientRequestProds, opts ...grpc.CallOption) (ProdService_GetVendorProdsClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_ProdService_serviceDesc.Streams[0], "/api.ProdService/GetVendorProds", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &prodServiceGetVendorProdsClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type ProdService_GetVendorProdsClient interface {
+	Recv() (*ClientResponseProds, error)
+	grpc.ClientStream
+}
+
+type prodServiceGetVendorProdsClient struct {
+	grpc.ClientStream
+}
+
+func (x *prodServiceGetVendorProdsClient) Recv() (*ClientResponseProds, error) {
+	m := new(ClientResponseProds)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // ProdServiceServer is the server API for ProdService service.
 type ProdServiceServer interface {
 	GetVendorProdTypes(context.Context, *ClientRequestType) (*ClientResponseType, error)
+	GetVendorProds(*ClientRequestProds, ProdService_GetVendorProdsServer) error
 }
 
 // UnimplementedProdServiceServer can be embedded to have forward compatible implementations.
@@ -166,6 +492,9 @@ type UnimplementedProdServiceServer struct {
 
 func (*UnimplementedProdServiceServer) GetVendorProdTypes(ctx context.Context, req *ClientRequestType) (*ClientResponseType, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetVendorProdTypes not implemented")
+}
+func (*UnimplementedProdServiceServer) GetVendorProds(req *ClientRequestProds, srv ProdService_GetVendorProdsServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetVendorProds not implemented")
 }
 
 func RegisterProdServiceServer(s *grpc.Server, srv ProdServiceServer) {
@@ -190,6 +519,27 @@ func _ProdService_GetVendorProdTypes_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProdService_GetVendorProds_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(ClientRequestProds)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(ProdServiceServer).GetVendorProds(m, &prodServiceGetVendorProdsServer{stream})
+}
+
+type ProdService_GetVendorProdsServer interface {
+	Send(*ClientResponseProds) error
+	grpc.ServerStream
+}
+
+type prodServiceGetVendorProdsServer struct {
+	grpc.ServerStream
+}
+
+func (x *prodServiceGetVendorProdsServer) Send(m *ClientResponseProds) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 var _ProdService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "api.ProdService",
 	HandlerType: (*ProdServiceServer)(nil),
@@ -197,6 +547,84 @@ var _ProdService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetVendorProdTypes",
 			Handler:    _ProdService_GetVendorProdTypes_Handler,
+		},
+	},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GetVendorProds",
+			Handler:       _ProdService_GetVendorProds_Handler,
+			ServerStreams: true,
+		},
+	},
+	Metadata: "api.proto",
+}
+
+// StorageServiceClient is the client API for StorageService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type StorageServiceClient interface {
+	GetProdsDetail(ctx context.Context, in *StorageRequest, opts ...grpc.CallOption) (*StorageResponse, error)
+}
+
+type storageServiceClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewStorageServiceClient(cc *grpc.ClientConn) StorageServiceClient {
+	return &storageServiceClient{cc}
+}
+
+func (c *storageServiceClient) GetProdsDetail(ctx context.Context, in *StorageRequest, opts ...grpc.CallOption) (*StorageResponse, error) {
+	out := new(StorageResponse)
+	err := c.cc.Invoke(ctx, "/api.StorageService/GetProdsDetail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// StorageServiceServer is the server API for StorageService service.
+type StorageServiceServer interface {
+	GetProdsDetail(context.Context, *StorageRequest) (*StorageResponse, error)
+}
+
+// UnimplementedStorageServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedStorageServiceServer struct {
+}
+
+func (*UnimplementedStorageServiceServer) GetProdsDetail(ctx context.Context, req *StorageRequest) (*StorageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProdsDetail not implemented")
+}
+
+func RegisterStorageServiceServer(s *grpc.Server, srv StorageServiceServer) {
+	s.RegisterService(&_StorageService_serviceDesc, srv)
+}
+
+func _StorageService_GetProdsDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StorageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StorageServiceServer).GetProdsDetail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.StorageService/GetProdsDetail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StorageServiceServer).GetProdsDetail(ctx, req.(*StorageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _StorageService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "api.StorageService",
+	HandlerType: (*StorageServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetProdsDetail",
+			Handler:    _StorageService_GetProdsDetail_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

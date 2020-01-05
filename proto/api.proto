@@ -4,6 +4,7 @@ package api;
 
 service ProdService {
     rpc GetVendorProdTypes(ClientRequestType) returns (ClientResponseType);
+    rpc GetVendorProds(ClientRequestProds) returns (stream ClientResponseProds);
 }
 
 message ClientRequestType {
@@ -12,4 +13,38 @@ message ClientRequestType {
 
 message ClientResponseType {
     string productType = 1;
+}
+
+message ClientRequestProds {
+    string vendor = 1;
+    string productType = 2;
+}
+
+message ClientResponseProds {
+    ProdsPrep product = 1;
+}
+
+message ProdsPrep {
+    string title = 1;
+    string url = 2;
+    string shortUrl = 3;
+
+}
+
+service StorageService {
+    rpc GetProdsDetail(StorageRequest) returns (StorageResponse);
+}
+
+message StorageRequest {
+    string vendor = 1;
+    string productType = 2;
+}
+
+message StorageResponse {
+    repeated Product prodDetail = 1;
+}
+
+message Product {
+    string title = 1;
+    string url = 2;
 }

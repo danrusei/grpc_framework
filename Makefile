@@ -12,6 +12,9 @@ clean:
 ## generate: generates the Go grpc libraries 
 generate:
 	/home/rdan/protobuf/bin/protoc -I proto --go_out=plugins=grpc:proto/ proto/api.proto
+	python3 -m grpc_tools.protoc -I./proto --python_out=./proto --grpc_python_out=./proto ./proto/api.proto
+	/bin/cp -rf proto/*.py storage/
+
 
 ## help: prints this help message
 help:
