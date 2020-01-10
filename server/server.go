@@ -14,6 +14,8 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/status"
+
+	"github.com/google/uuid"
 )
 
 var (
@@ -144,11 +146,14 @@ func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdS
 	}
 
 	for _, prod := range response.ProdDetail {
-		if err := stream.Send(&api.ClientResponseProds{
+
+		id := uuid.Must(uuid.NewRandom()).String()
+		
+		if err := stream.Send(&api.ClientResponseProds{	
 			Product: &api.ProdsPrep{
 				Title:    prod.GetTitle(),
 				Url:      prod.GetUrl(),
-				ShortUrl: "None- TBD",
+				ShortUrl: "https://made-up-url.com/" + id[:6],
 			},
 		}); err != nil {
 			return status.Error(codes.Internal, "not able to send the response")
