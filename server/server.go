@@ -95,7 +95,7 @@ func (serv *server) GetVendorProdTypes(ctx context.Context, req *api.ClientReque
 	}
 
 	// some heavy processing **increase it ** if you want to test out DeadlineExceeded
-	time.Sleep(2 * time.Second)
+	time.Sleep(1 * time.Second)
 
 	if ctx.Err() == context.DeadlineExceeded {
 		log.Printf("dealine has exceeded, stoping server side operation")
@@ -135,6 +135,10 @@ func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdS
 		ProductType: req.GetProductType(),
 	})
 	if err != nil {
+		if errStatus, ok := status.FromError(err); ok {
+			log.Printf("error while calling client.GetProdsDetail() method: %v ", errStatus.Message())
+			return status.Errorf(errStatus.Code(), "error while calling client.GetProdsDetail() method: %v ", errStatus.Message())
+		}
 		log.Printf("error while calling client.GetProdsDetail() method: %v ", err)
 		return status.Errorf(codes.Internal, "error while calling client.GetProdsDetail() method: %v ", err)
 	}

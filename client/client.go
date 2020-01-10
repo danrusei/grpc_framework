@@ -13,6 +13,7 @@ import (
 	api "github.com/Danr17/grpc_framework/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/status"
 )
 
 var (
@@ -73,6 +74,9 @@ func getprodtypes(ctx context.Context, client api.ProdServiceClient, vendor stri
 
 	response, err := client.GetVendorProdTypes(ctx, &requestProdType)
 	if err != nil {
+		if errStatus, ok := status.FromError(err); ok {
+			return status.Errorf(errStatus.Code(), "error while calling client.GetVendorProdTypes() method: %v ", errStatus.Message())
+		}
 		return fmt.Errorf("Could not get the products: %v", err)
 	}
 
@@ -95,6 +99,9 @@ func getprods(ctx context.Context, client api.ProdServiceClient, vendor string, 
 
 	stream, err := client.GetVendorProds(ctx, &requestProd)
 	if err != nil {
+		if errStatus, ok := status.FromError(err); ok {
+			return status.Errorf(errStatus.Code(), "error while calling client.GetVendorProds() method: %v ", errStatus.Message())
+		}
 		return fmt.Errorf("Could not get the stream of products : %v", err)
 	}
 
@@ -104,7 +111,10 @@ func getprods(ctx context.Context, client api.ProdServiceClient, vendor string, 
 			break
 		}
 		if err != nil {
-			log.Fatalf("%v.GetProducts(_) = _, %v", client, err)
+			if errStatus, ok := status.FromError(err); ok {
+				return status.Errorf(errStatus.Code(), "error while receiving the stream for client.GetVendorProds: %v ", errStatus.Message())
+			}
+			return fmt.Errorf("error while receiving the stream for client.GetVendorProds: %v", err)
 		}
 		fmt.Printf("Title: %s, Url: %s,  ShortUrl: %s\n", product.GetProduct().GetTitle(), product.GetProduct().GetUrl(), product.GetProduct().GetShortUrl())
 	}

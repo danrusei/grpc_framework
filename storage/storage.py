@@ -23,7 +23,13 @@ class Storage(api_pb2_grpc.StorageServiceServicer):
         vendor = request.vendor.lower()
         product_type = request.productType.lower()
 
-        prod_type_list = get_prods(vendor, product_type)
+        try:
+            prod_type_list = get_prods(vendor, product_type)
+        except AssertionError as error:
+            print(error)
+            context.set_details(error)
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            return api_pb2.StorageResponse()
 
         products = []
         
@@ -33,7 +39,6 @@ class Storage(api_pb2_grpc.StorageServiceServicer):
             product.url = prod["url"]
             products.append(product)
 
-
         return api_pb2.StorageResponse(prodDetail=products)
 
 def get_prods(vendor, product_type):
@@ -42,10 +47,9 @@ def get_prods(vendor, product_type):
         if product_type in vendors[vendor].keys():
             return vendors[vendor][product_type]
         else:
-            return "No Product Type"
+            raise Exception("Invalid ProductType: {}".format(product_type))
     else:
-        return "No valid Vendor"
-    
+        raise Exception("Invalid Vendor: {}".format(vendor))
 
 
 def serve(port):
