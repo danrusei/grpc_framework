@@ -135,6 +135,7 @@ func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdS
 		ProductType: req.GetProductType(),
 	})
 	if err != nil {
+		log.Printf("error while calling client.GetProdsDetail() method: %v ", err)
 		return status.Errorf(codes.Internal, "error while calling client.GetProdsDetail() method: %v ", err)
 	}
 
