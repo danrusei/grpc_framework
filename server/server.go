@@ -21,12 +21,18 @@ var (
 )
 
 type server struct {
-	prodTypes map[string][]string
+	prodTypes   map[string][]string
+	storageAddr string
+	storagePort string
 }
 
 func newServer(vendorServ map[string][]string) *server {
 
-	return &server{prodTypes: vendorServ}
+	return &server{
+		prodTypes:   vendorServ,
+		storageAddr: "localhost",
+		storagePort: "6000",
+	}
 }
 
 var vendorServices = map[string][]string{
@@ -72,7 +78,7 @@ func run(addr string) error {
 }
 
 //GetVendorProdTypes implement the GRPC server function
-func (serv server) GetVendorProdTypes(ctx context.Context, req *api.ClientRequestType) (*api.ClientResponseType, error) {
+func (serv *server) GetVendorProdTypes(ctx context.Context, req *api.ClientRequestType) (*api.ClientResponseType, error) {
 
 	log.Printf("have received a request for -> %s <- as vendor", req.GetVendor())
 
@@ -110,9 +116,39 @@ func (serv server) GetVendorProdTypes(ctx context.Context, req *api.ClientReques
 	return &clientResponse, nil
 }
 
-func (serv server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdService_GetVendorProdsServer) error {
+func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdService_GetVendorProdsServer) error {
 
 	log.Printf("have received a request for -> %s <- product type from -> %s <- vendor", req.GetProductType(), req.GetVendor())
+
+	conn, err := grpc.Dial(net.JoinHostPort(serv.storageAddr, serv.storagePort), grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("Failed to dial server:, %s", err)
+
+	}
+	defer conn.Close()
+
+	ctx := context.Background()
+
+	client := api.NewStorageServiceClient(conn)
+	response, err := client.GetProdsDetail(ctx, &api.StorageRequest{
+		Vendor:      req.GetVendor(),
+		ProductType: req.GetProductType(),
+	})
+	if err != nil {
+		return status.Errorf(codes.Internal, "error while calling client.GetProdsDetail() method: %v ", err)
+	}
+
+	for _, prod := range response.ProdDetail {
+		if err := stream.Send(&api.ClientResponseProds{
+			Product: &api.ProdsPrep{
+				Title:    prod.GetTitle(),
+				Url:      prod.GetUrl(),
+				ShortUrl: "None- TBD",
+			},
+		}); err != nil {
+			return status.Error(codes.Internal, "not able to send the response")
+		}
+	}
 
 	return nil
 }

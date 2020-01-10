@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"os"
@@ -24,7 +25,7 @@ func main() {
 	flag.Parse()
 
 	if flag.NArg() < 1 {
-		fmt.Fprintln(os.Stderr, "missing command: getprodtypes")
+		fmt.Fprintln(os.Stderr, "missing command: getprodtypes or getprods")
 		os.Exit(1)
 	}
 
@@ -48,6 +49,8 @@ func main() {
 	switch cmd := flag.Arg(0); cmd {
 	case "getprodtypes":
 		err = getprodtypes(ctx, client, flag.Arg(1))
+	case "getprods":
+		err = getprods(ctx, client, flag.Arg(1), flag.Arg(2))
 	default:
 		err = fmt.Errorf("unknown subcommand %s", cmd)
 	}
@@ -64,11 +67,11 @@ func getprodtypes(ctx context.Context, client api.ProdServiceClient, vendor stri
 		return fmt.Errorf("Vendor arg is missing, select between available cloud vendors: google, aws, oracle")
 	}
 
-	requestProd := api.ClientRequestType{
+	requestProdType := api.ClientRequestType{
 		Vendor: vendor,
 	}
 
-	response, err := client.GetVendorProdTypes(ctx, &requestProd)
+	response, err := client.GetVendorProdTypes(ctx, &requestProdType)
 	if err != nil {
 		return fmt.Errorf("Could not get the products: %v", err)
 	}
@@ -77,4 +80,34 @@ func getprodtypes(ctx context.Context, client api.ProdServiceClient, vendor stri
 
 	return nil
 
+}
+
+func getprods(ctx context.Context, client api.ProdServiceClient, vendor string, prodType string) error {
+
+	if vendor == "" || prodType == "" {
+		return fmt.Errorf("You need both, vendor and prodType args. Example command: $client oracle storage")
+	}
+
+	requestProd := api.ClientRequestProds{
+		Vendor:      vendor,
+		ProductType: prodType,
+	}
+
+	stream, err := client.GetVendorProds(ctx, &requestProd)
+	if err != nil {
+		return fmt.Errorf("Could not get the stream of products : %v", err)
+	}
+
+	for {
+		product, err := stream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatalf("%v.GetProducts(_) = _, %v", client, err)
+		}
+		fmt.Printf("Title: %s, Url: %s,  ShortUrl: %s\n", product.GetProduct().GetTitle(), product.GetProduct().GetUrl(), product.GetProduct().GetShortUrl())
+	}
+
+	return nil
 }
