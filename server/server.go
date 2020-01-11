@@ -129,7 +129,7 @@ func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdS
 	}
 	defer conn.Close()
 
-	ctx := context.Background()
+	ctx := stream.Context()
 
 	client := api.NewStorageServiceClient(conn)
 	response, err := client.GetProdsDetail(ctx, &api.StorageRequest{
@@ -148,8 +148,8 @@ func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdS
 	for _, prod := range response.ProdDetail {
 
 		id := uuid.Must(uuid.NewRandom()).String()
-		
-		if err := stream.Send(&api.ClientResponseProds{	
+
+		if err := stream.Send(&api.ClientResponseProds{
 			Product: &api.ProdsPrep{
 				Title:    prod.GetTitle(),
 				Url:      prod.GetUrl(),

@@ -18,7 +18,7 @@ vendors = {'google': {'compute': g_compute, 'storage': g_storage}, 'aws': {'comp
 class Storage(api_pb2_grpc.StorageServiceServicer):      
 
     def GetProdsDetail(self, request, context):
-        
+
         # Retrieve vendor and prodType from client
         vendor = request.vendor.lower()
         product_type = request.productType.lower()
@@ -30,14 +30,19 @@ class Storage(api_pb2_grpc.StorageServiceServicer):
             context.set_details(error)
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return api_pb2.StorageResponse()
-
-        products = []
         
-        for prod in prod_type_list:
-            product = api_pb2.Product()
-            product.title = prod["title"]
-            product.url = prod["url"]
-            products.append(product)
+       # time.sleep(5)
+        products = []
+
+        if context.is_active():   
+            for prod in prod_type_list:
+                product = api_pb2.Product()
+                product.title = prod["title"]
+                product.url = prod["url"]
+                products.append(product)
+        
+        else:
+            return api_pb2.StorageResponse()
 
         return api_pb2.StorageResponse(prodDetail=products)
 
