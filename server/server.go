@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"time"
 
 	api "github.com/Danr17/grpc_framework/proto"
 
@@ -159,7 +158,7 @@ func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdS
 		}
 
 		// to simulate heavy processing **increase it ** -- to test out DeadlineExceeded
-		time.Sleep(1 * time.Second)
+		//time.Sleep(1 * time.Second)
 
 		if ctx.Err() == context.DeadlineExceeded {
 			log.Printf("dealine has exceeded, stoping server side operation")
