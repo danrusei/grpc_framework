@@ -35,7 +35,7 @@ class Storage(api_pb2_grpc.StorageServiceServicer):
             context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
             return api_pb2.StorageResponse()
         
-       # time.sleep(5)
+        # time.sleep(5)
         products = []
 
         if context.is_active():   
@@ -46,6 +46,8 @@ class Storage(api_pb2_grpc.StorageServiceServicer):
                 products.append(product)
         
         else:
+            context.set_code(grpc.StatusCode.DEADLINE_EXCEEDED)
+            logging.info("the connection to {} has dropped".format(context.peer()))
             return api_pb2.StorageResponse()
         
         logging.info("a number of {} products were sent to client".format(len(products)))
