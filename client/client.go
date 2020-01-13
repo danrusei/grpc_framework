@@ -64,6 +64,8 @@ func main() {
 
 func getprodtypes(ctx context.Context, client api.ProdServiceClient, vendor string) error {
 
+	log.Printf("requesting all product types from vendor: %s", vendor)
+
 	if vendor == "" {
 		return fmt.Errorf("Vendor arg is missing, select between available cloud vendors: google, aws, oracle")
 	}
@@ -87,6 +89,8 @@ func getprodtypes(ctx context.Context, client api.ProdServiceClient, vendor stri
 }
 
 func getprods(ctx context.Context, client api.ProdServiceClient, vendor string, prodType string) error {
+
+	log.Printf("requesting all %s products from %s", prodType, vendor)
 
 	if vendor == "" || prodType == "" {
 		return fmt.Errorf("You need both, vendor and prodType args. Example command: $client oracle storage")

@@ -96,14 +96,13 @@ func (serv *server) GetVendorProdTypes(ctx context.Context, req *api.ClientReque
 		return nil, status.Errorf(codes.InvalidArgument, "wrong vendor, select between google, aws, oracle")
 	}
 
-	// some heavy processing **increase it ** if you want to test out DeadlineExceeded
-	time.Sleep(1 * time.Second)
+	//to simulate heavy processing **increase it ** -- to test out DeadlineExceeded
+	//time.Sleep(1 * time.Second)
 
 	if ctx.Err() == context.DeadlineExceeded {
 		log.Printf("dealine has exceeded, stoping server side operation")
 		return nil, status.Error(codes.DeadlineExceeded, "dealine has exceeded, stoping server side operation")
 	}
-
 	if ctx.Err() == context.Canceled {
 		log.Print("the user has canceled the request, stoping server side operation")
 		return nil, status.Error(codes.Canceled, "the user has canceled the request, stoping server side operation")
@@ -113,7 +112,7 @@ func (serv *server) GetVendorProdTypes(ctx context.Context, req *api.ClientReque
 		ProductType: prodTypes,
 	}
 
-	log.Printf("the response is sent to client: %s", prodTypes)
+	log.Printf("the response was sent to client")
 
 	return &clientResponse, nil
 }
@@ -158,7 +157,22 @@ func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdS
 		}); err != nil {
 			return status.Error(codes.Internal, "not able to send the response")
 		}
+
+		// to simulate heavy processing **increase it ** -- to test out DeadlineExceeded
+		time.Sleep(1 * time.Second)
+
+		if ctx.Err() == context.DeadlineExceeded {
+			log.Printf("dealine has exceeded, stoping server side operation")
+			return status.Error(codes.DeadlineExceeded, "dealine has exceeded, stoping server side operation")
+		}
+		if ctx.Err() == context.Canceled {
+			log.Print("the user has canceled the request, stoping server side operation")
+			return status.Error(codes.Canceled, "the user has canceled the request, stoping server side operation")
+		}
+
 	}
+
+	log.Printf("the response was sent to client")
 
 	return nil
 }

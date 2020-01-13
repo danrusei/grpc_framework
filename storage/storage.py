@@ -15,6 +15,8 @@ o_storage = [{'title': 'Autonomous Data Warehouse', 'url': 'https://www.oracle.c
 
 vendors = {'google': {'compute': g_compute, 'storage': g_storage}, 'aws': {'compute': a_compute, 'storage': a_storage}, 'oracle': {'compute': o_compute, 'storage': o_storage}}
 
+logging.basicConfig(level=logging.INFO)
+
 class Storage(api_pb2_grpc.StorageServiceServicer):      
 
     def GetProdsDetail(self, request, context):
@@ -22,6 +24,8 @@ class Storage(api_pb2_grpc.StorageServiceServicer):
         # Retrieve vendor and prodType from client
         vendor = request.vendor.lower()
         product_type = request.productType.lower()
+
+        logging.info("have received a request for -> {} <- product type from -> {} <- vendor".format(product_type, vendor))
 
         try:
             prod_type_list = get_prods(vendor, product_type)
@@ -43,6 +47,8 @@ class Storage(api_pb2_grpc.StorageServiceServicer):
         
         else:
             return api_pb2.StorageResponse()
+        
+        logging.info("a number of {} products were sent to client".format(len(products)))
 
         return api_pb2.StorageResponse(prodDetail=products)
 
