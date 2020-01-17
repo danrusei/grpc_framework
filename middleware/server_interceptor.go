@@ -35,7 +35,7 @@ func UnaryServerInterceptor(opts ...Option) grpc.UnaryServerInterceptor {
 		log := klogr.New().WithName("MyName").WithValues("user", "Dan")
 
 		//log.Info("finished unary call with code", "val1", err.Error(), "val2", map[string]int{"k": 1})
-		log.Info("finished unary call with code", "val1", err.Error(), "val2", values)
+		log.Info("finished unary call with code", "val1", "heello", "val2", values)
 
 		return resp, err
 	}

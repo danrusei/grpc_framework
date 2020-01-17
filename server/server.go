@@ -6,8 +6,13 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"time"
 
+	grpcklog "github.com/Danr17/grpc_framework/middleware"
 	api "github.com/Danr17/grpc_framework/proto"
+
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -62,10 +67,30 @@ func run(addr string) error {
 		return fmt.Errorf("could not process the credentials: %v", err)
 	}
 
-	// Create an array of gRPC options with the credentials
-	opts := []grpc.ServerOption{grpc.Creds(creds)}
+	// Shared options for the logger, with a custom duration to log field function.
+	optsLog := []grpcklog.Option{
+		grpcklog.WithDurationField(func(duration time.Duration) (key string, value interface{}) {
+			return "grpc.time_ns", duration.Nanoseconds()
+		}),
+	}
 
-	srv := grpc.NewServer(opts...)
+	// Create an array of gRPC options with the credentials
+	//opts := []grpc.ServerOption{grpc.Creds(creds)}
+
+	//srv := grpc.NewServer(opts...)
+	srv := grpc.NewServer(
+		grpc_middleware.WithUnaryServerChain(
+			grpc_ctxtags.UnaryServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
+			grpcklog.UnaryServerInterceptor(optsLog...),
+		),
+		grpc.Creds(creds),
+		/*
+			grpc_middleware.WithStreamServerChain(
+				grpc_ctxtags.StreamServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
+				grpcklog.StreamServerInterceptor(opts...),
+			),
+		*/
+	)
 
 	api.RegisterProdServiceServer(srv, newServer(vendorServices))
 

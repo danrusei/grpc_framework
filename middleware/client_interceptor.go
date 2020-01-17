@@ -38,14 +38,15 @@ func logFinalClientLine(o *options, fields map[string]interface{}, startTime tim
 
 	fields[durField] = durVal
 
+	if err != nil {
+		fields["error"] = err
+	}
+
 	var values string
 	for k, v := range fields {
 		values += fmt.Sprintln(k, v)
 	}
 
-	if err != nil {
-		fields["error"] = err
-	}
 	log := klogr.New().WithName("MyName").WithValues("user", "Dan")
 
 	//log.Info("finished unary call with code", "val1", err.Error(), "val2", map[string]int{"k": 1})
