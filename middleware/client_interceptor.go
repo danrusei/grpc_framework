@@ -5,18 +5,18 @@ import (
 	"path"
 	"time"
 
+	"github.com/go-logr/logr"
 	"google.golang.org/grpc"
-	"k8s.io/klog/klogr"
 )
 
 // UnaryClientInterceptor returns a new unary client interceptor that optionally logs the execution of external gRPC calls.
-func UnaryClientInterceptor(opts ...Option) grpc.UnaryClientInterceptor {
+func UnaryClientInterceptor(log logr.Logger, opts ...Option) grpc.UnaryClientInterceptor {
 	o := evaluateClientOpt(opts)
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
 		fields := newClientLoggerFields(ctx, method)
 		startTime := time.Now()
 		err := invoker(ctx, method, req, reply, cc, opts...)
-		logFinalClientLine(o, fields, startTime, err, "finished client unary call")
+		logFinalClientLine(o, log, fields, startTime, err, "finished client unary call")
 		return err
 	}
 }
@@ -32,7 +32,7 @@ func newClientLoggerFields(ctx context.Context, fullMethodString string) map[str
 	}
 }
 
-func logFinalClientLine(o *options, fields map[string]interface{}, startTime time.Time, err error, msg string) {
+func logFinalClientLine(o *options, log logr.Logger, fields map[string]interface{}, startTime time.Time, err error, msg string) {
 	durField, durVal := o.durationFunc(time.Now().Sub(startTime))
 
 	fields[durField] = durVal
@@ -46,7 +46,7 @@ func logFinalClientLine(o *options, fields map[string]interface{}, startTime tim
 		name = val.(string)
 	}
 
-	log := klogr.New().WithName(name).WithValues("user", "Dan")
+	log.WithName(name).WithValues("user", "Dan")
 
 	//log.Info("finished unary call with code", "val1", err.Error(), "val2", map[string]int{"k": 1})
 	log.Info("finished unary call with code", "val1", "test", "val2", fields)

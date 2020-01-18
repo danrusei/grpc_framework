@@ -12,6 +12,7 @@ import (
 
 	grpcklog "github.com/Danr17/grpc_framework/middleware"
 	api "github.com/Danr17/grpc_framework/proto"
+	"k8s.io/klog/klogr"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -26,6 +27,7 @@ var (
 func main() {
 
 	flag.Parse()
+	logger := klogr.New()
 
 	if flag.NArg() < 1 {
 		fmt.Fprintln(os.Stderr, "missing command: getprodtypes or getprods")
@@ -42,7 +44,7 @@ func main() {
 	}
 
 	dialOpts := []grpc.DialOption{
-		grpc.WithUnaryInterceptor(grpcklog.UnaryClientInterceptor(opts...)),
+		grpc.WithUnaryInterceptor(grpcklog.UnaryClientInterceptor(logger, opts...)),
 		grpc.WithTransportCredentials(creds),
 	}
 

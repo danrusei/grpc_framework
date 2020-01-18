@@ -10,6 +10,8 @@ import (
 
 	grpcklog "github.com/Danr17/grpc_framework/middleware"
 	api "github.com/Danr17/grpc_framework/proto"
+	"github.com/go-logr/logr"
+	"k8s.io/klog/klogr"
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
@@ -50,13 +52,15 @@ var vendorServices = map[string][]string{
 func main() {
 
 	flag.Parse()
+	logger := klogr.New()
+
 	addr := fmt.Sprintf("localhost:%d", *port)
-	if err := run(addr); err != nil {
+	if err := run(logger, addr); err != nil {
 		log.Fatalf("could not start the server: %s", err)
 	}
 }
 
-func run(addr string) error {
+func run(logger logr.Logger, addr string) error {
 	lis, err := net.Listen("tcp", addr)
 	if err != nil {
 		return fmt.Errorf("could not listen on the port %s: %s", addr, err)
@@ -81,7 +85,7 @@ func run(addr string) error {
 	srv := grpc.NewServer(
 		grpc_middleware.WithUnaryServerChain(
 			grpc_ctxtags.UnaryServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
-			grpcklog.UnaryServerInterceptor(optsLog...),
+			grpcklog.UnaryServerInterceptor(logger, optsLog...),
 		),
 		grpc.Creds(creds),
 		/*

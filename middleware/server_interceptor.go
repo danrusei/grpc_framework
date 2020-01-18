@@ -5,12 +5,12 @@ import (
 	"path"
 	"time"
 
+	"github.com/go-logr/logr"
 	"google.golang.org/grpc"
-	"k8s.io/klog/klogr"
 )
 
 // UnaryServerInterceptor returns a new unary server interceptors that adds logrus.Entry to the context.
-func UnaryServerInterceptor(opts ...Option) grpc.UnaryServerInterceptor {
+func UnaryServerInterceptor(log logr.Logger, opts ...Option) grpc.UnaryServerInterceptor {
 	o := evaluateServerOpt(opts)
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		startTime := time.Now()
@@ -31,7 +31,7 @@ func UnaryServerInterceptor(opts ...Option) grpc.UnaryServerInterceptor {
 			name = val.(string)
 		}
 
-		log := klogr.New().WithName(name).WithValues("user", "Dan")
+		log.WithName(name).WithValues("user", "Dan")
 
 		//log.Info("finished unary call with code", "val1", err.Error(), "val2", map[string]int{"k": 1})
 		log.Info("finished unary call with code", "val1", "heello", "val2", fields)
