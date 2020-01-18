@@ -46,7 +46,10 @@ func main() {
 		grpc.WithTransportCredentials(creds),
 	}
 
-	conn, err := grpc.Dial(net.JoinHostPort(*addr, *port), dialOpts...)
+	ctx, cancel := context.WithTimeout(context.Background(), 4*time.Second)
+	defer cancel()
+
+	conn, err := grpc.DialContext(ctx, net.JoinHostPort(*addr, *port), dialOpts...)
 	if err != nil {
 		log.Fatalf("Failed to dial server:, %s", err)
 
@@ -54,9 +57,6 @@ func main() {
 	defer conn.Close()
 
 	client := api.NewProdServiceClient(conn)
-
-	ctx, cancel := context.WithTimeout(context.Background(), 4*time.Second)
-	defer cancel()
 
 	switch cmd := flag.Arg(0); cmd {
 	case "getprodtypes":
@@ -84,8 +84,6 @@ func getprodtypes(ctx context.Context, client api.ProdServiceClient, vendor stri
 	requestProdType := api.ClientRequestType{
 		Vendor: vendor,
 	}
-
-	grpcklog.AddFields(ctx, map[string]interface{}{"Name": "Client_098777"})
 
 	response, err := client.GetVendorProdTypes(ctx, &requestProdType)
 	if err != nil {
