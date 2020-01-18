@@ -5,6 +5,7 @@ import (
 	"path"
 	"time"
 
+	api "github.com/Danr17/grpc_framework/proto"
 	"github.com/go-logr/logr"
 	"google.golang.org/grpc"
 )
@@ -13,6 +14,8 @@ import (
 func UnaryClientInterceptor(log logr.Logger, opts ...Option) grpc.UnaryClientInterceptor {
 	o := evaluateClientOpt(opts)
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
+		request := req.(*api.ClientRequestType)
+		log.Info("requesting all product types from vendor: " + request.Vendor)
 		fields := newClientLoggerFields(ctx, method)
 		startTime := time.Now()
 		err := invoker(ctx, method, req, reply, cc, opts...)
@@ -25,16 +28,16 @@ func newClientLoggerFields(ctx context.Context, fullMethodString string) map[str
 	service := path.Dir(fullMethodString)[1:]
 	method := path.Base(fullMethodString)
 	return map[string]interface{}{
-		"SystemField":  "grpc",
-		"KindField":    "client",
+		"SystemField":  "grpc client",
 		"grpc.service": service,
 		"grpc.method":  method,
 	}
 }
 
 func logFinalClientLine(o *options, log logr.Logger, fields map[string]interface{}, startTime time.Time, err error, msg string) {
+	code := o.codeFunc(err)
+	level := o.levelFunc(code)
 	durField, durVal := o.durationFunc(time.Now().Sub(startTime))
-
 	fields[durField] = durVal
 
 	if err != nil {
@@ -48,6 +51,12 @@ func logFinalClientLine(o *options, log logr.Logger, fields map[string]interface
 
 	log.WithName(name).WithValues("user", "Dan")
 
-	//log.Info("finished unary call with code", "val1", err.Error(), "val2", map[string]int{"k": 1})
-	log.Info("finished unary call with code", "val1", "test", "val2", fields)
+	switch level {
+	case InfoLog:
+		log.WithName(name).Info("Info - The call finished with code "+code.String(), "details", fields)
+	case WarningLog:
+		log.Info("Warning - The call finished with code "+code.String(), "details", fields)
+	case ErrorLog:
+		log.Error(err, "The call finished with code "+code.String(), "details", fields)
+	}
 }
