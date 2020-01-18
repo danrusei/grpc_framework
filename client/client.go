@@ -10,7 +10,9 @@ import (
 	"os"
 	"time"
 
+	grpcklog "github.com/Danr17/grpc_framework/middleware"
 	api "github.com/Danr17/grpc_framework/proto"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/status"
@@ -35,7 +37,16 @@ func main() {
 		log.Fatalf("could not process the credentials: %v", err)
 	}
 
-	conn, err := grpc.Dial(net.JoinHostPort(*addr, *port), grpc.WithTransportCredentials(creds))
+	opts := []grpcklog.Option{
+		grpcklog.WithDurationField(grpcklog.DurationToDurationField),
+	}
+
+	dialOpts := []grpc.DialOption{
+		grpc.WithUnaryInterceptor(grpcklog.UnaryClientInterceptor(opts...)),
+		grpc.WithTransportCredentials(creds),
+	}
+
+	conn, err := grpc.Dial(net.JoinHostPort(*addr, *port), dialOpts...)
 	if err != nil {
 		log.Fatalf("Failed to dial server:, %s", err)
 
@@ -73,6 +84,8 @@ func getprodtypes(ctx context.Context, client api.ProdServiceClient, vendor stri
 	requestProdType := api.ClientRequestType{
 		Vendor: vendor,
 	}
+
+	grpcklog.AddFields(ctx, map[string]interface{}{"Name": "Client_098777"})
 
 	response, err := client.GetVendorProdTypes(ctx, &requestProdType)
 	if err != nil {

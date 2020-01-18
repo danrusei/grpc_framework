@@ -2,7 +2,6 @@ package grpcklog
 
 import (
 	"context"
-	"fmt"
 	"path"
 	"time"
 
@@ -27,15 +26,15 @@ func UnaryServerInterceptor(opts ...Option) grpc.UnaryServerInterceptor {
 		fields := Extract(newCtx)
 		fields[durField] = durVal
 
-		var values string
-		for k, v := range fields {
-			values += fmt.Sprintln(k, v)
+		var name string = "Unknown User"
+		if val, ok := fields["Name"]; ok {
+			name = val.(string)
 		}
 
-		log := klogr.New().WithName("MyName").WithValues("user", "Dan")
+		log := klogr.New().WithName(name).WithValues("user", "Dan")
 
 		//log.Info("finished unary call with code", "val1", err.Error(), "val2", map[string]int{"k": 1})
-		log.Info("finished unary call with code", "val1", "heello", "val2", values)
+		log.Info("finished unary call with code", "val1", "heello", "val2", fields)
 
 		return resp, err
 	}

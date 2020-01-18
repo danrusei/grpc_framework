@@ -16,6 +16,17 @@ var (
 	ctxLoggerKey = &ctxLoggerMarker{}
 )
 
+// AddFields adds fields to the logger.
+func AddFields(ctx context.Context, fields map[string]interface{}) {
+	l, ok := ctx.Value(ctxLoggerKey).(*ctxLogger)
+	if !ok || l == nil {
+		return
+	}
+	for k, v := range fields {
+		l.fields[k] = v
+	}
+}
+
 // Extract takes the call-scoped logrus.Entry from ctx_logrus middleware.
 //
 // If the ctx_logrus middleware wasn't used, a no-op `logrus.Entry` is returned. This makes it safe to
