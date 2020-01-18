@@ -108,6 +108,10 @@ func (serv *server) GetVendorProdTypes(ctx context.Context, req *api.ClientReque
 
 	log.Printf("have received a request for -> %s <- as vendor", req.GetVendor())
 
+	//let's assume we are able to identify the calling Customer, fake it with random numbers
+	clientID := uuid.Must(uuid.NewRandom()).String()
+	grpcklog.AddFields(ctx, map[string]interface{}{"Name": "Customer-0367" + clientID[:4]})
+
 	var prodTypes string
 
 	if vendorProdTypes, found := serv.prodTypes[req.GetVendor()]; found {
