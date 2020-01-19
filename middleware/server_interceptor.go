@@ -6,10 +6,11 @@ import (
 	"time"
 
 	"github.com/go-logr/logr"
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"google.golang.org/grpc"
 )
 
-// UnaryServerInterceptor returns a new unary server interceptors that adds logrus.Entry to the context.
+// UnaryServerInterceptor returns a new unary server interceptors that adds fields to the context.
 func UnaryServerInterceptor(log logr.Logger, opts ...Option) grpc.UnaryServerInterceptor {
 	o := evaluateServerOpt(opts)
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
@@ -21,22 +22,46 @@ func UnaryServerInterceptor(log logr.Logger, opts ...Option) grpc.UnaryServerInt
 		if !o.shouldLog(info.FullMethod, err) {
 			return resp, err
 		}
+		code := o.codeFunc(err)
+		level := o.levelFunc(code)
 		durField, durVal := o.durationFunc(time.Since(startTime))
-
 		fields := Extract(newCtx)
 		fields[durField] = durVal
+		fields["grpc.code"] = code.String()
 
-		var name string = "Unknown User"
-		if val, ok := fields["Name"]; ok {
-			name = val.(string)
-		}
-
-		log.WithName(name).WithValues("user", "Dan")
-
-		//log.Info("finished unary call with code", "val1", err.Error(), "val2", map[string]int{"k": 1})
-		log.Info("finished unary call with code", "val1", "heello", "val2", fields)
+		levelLogf(log, level, "finished streaming call with code "+code.String(), fields, err)
 
 		return resp, err
+	}
+}
+
+// StreamServerInterceptor returns a new streaming server interceptor that adds fields to the context.
+func StreamServerInterceptor(log logr.Logger, opts ...Option) grpc.StreamServerInterceptor {
+	o := evaluateServerOpt(opts)
+	return func(srv interface{}, stream grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
+		startTime := time.Now()
+		newCtx := newLoggerForCall(stream.Context(), info.FullMethod, startTime)
+		wrapped := grpc_middleware.WrapServerStream(stream)
+		wrapped.WrappedContext = newCtx
+
+		err := handler(srv, wrapped)
+
+		if !o.shouldLog(info.FullMethod, err) {
+			return err
+		}
+		code := o.codeFunc(err)
+		level := o.levelFunc(code)
+		durField, durVal := o.durationFunc(time.Since(startTime))
+		fields := Extract(newCtx)
+		fields[durField] = durVal
+		fields["grpc.code"] = code.String()
+		if err != nil {
+			fields["error"] = err
+		}
+
+		levelLogf(log, level, "finished streaming call with code "+code.String(), fields, err)
+
+		return err
 	}
 }
 
@@ -44,8 +69,7 @@ func newLoggerForCall(ctx context.Context, fullMethodString string, start time.T
 	service := path.Dir(fullMethodString)[1:]
 	method := path.Base(fullMethodString)
 	callLog := map[string]interface{}{
-		"SystemField":     "grpc",
-		"KindField":       "server",
+		"SystemField":     "grpc server",
 		"grpc.service":    service,
 		"grpc.method":     method,
 		"grpc.start_time": start.Format(time.RFC3339),
@@ -62,4 +86,15 @@ func newLoggerForCall(ctx context.Context, fullMethodString string, start time.T
 		callLog[k] = v
 	}
 	return ToContext(ctx, callLog)
+}
+
+func levelLogf(log logr.Logger, level KlogLevel, format string, fields map[string]interface{}, err error) {
+	switch level {
+	case InfoLog:
+		log.Info("Info - "+format, "details", fields)
+	case WarningLog:
+		log.Info("Warning - "+format, "details", fields)
+	case ErrorLog:
+		log.Error(err, format, "details", fields)
+	}
 }

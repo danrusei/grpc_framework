@@ -88,12 +88,10 @@ func run(logger logr.Logger, addr string) error {
 			grpcklog.UnaryServerInterceptor(logger, optsLog...),
 		),
 		grpc.Creds(creds),
-		/*
-			grpc_middleware.WithStreamServerChain(
-				grpc_ctxtags.StreamServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
-				grpcklog.StreamServerInterceptor(opts...),
-			),
-		*/
+		grpc_middleware.WithStreamServerChain(
+			grpc_ctxtags.StreamServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
+			grpcklog.StreamServerInterceptor(logger, optsLog...),
+		),
 	)
 
 	api.RegisterProdServiceServer(srv, newServer(vendorServices))
@@ -117,13 +115,11 @@ func (serv *server) GetVendorProdTypes(ctx context.Context, req *api.ClientReque
 	grpcklog.AddFields(ctx, map[string]interface{}{"Name": "Customer-0367" + clientID[:4]})
 
 	var prodTypes string
-
 	if vendorProdTypes, found := serv.prodTypes[req.GetVendor()]; found {
 
 		for _, prodType := range vendorProdTypes {
 			prodTypes = prodTypes + " " + prodType
 		}
-
 	} else {
 		return nil, status.Errorf(codes.InvalidArgument, "wrong vendor, select between google, aws, oracle")
 	}
@@ -144,8 +140,6 @@ func (serv *server) GetVendorProdTypes(ctx context.Context, req *api.ClientReque
 		ProductType: prodTypes,
 	}
 
-	log.Printf("the response was sent to client")
-
 	return &clientResponse, nil
 }
 
@@ -161,7 +155,6 @@ func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdS
 	defer conn.Close()
 
 	ctx := stream.Context()
-
 	client := api.NewStorageServiceClient(conn)
 	response, err := client.GetProdsDetail(ctx, &api.StorageRequest{
 		Vendor:      req.GetVendor(),
@@ -201,10 +194,7 @@ func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdS
 			log.Print("the user has canceled the request, stoping server side operation")
 			return status.Error(codes.Canceled, "the user has canceled the request, stoping server side operation")
 		}
-
 	}
-
-	log.Printf("the response was sent to client")
 
 	return nil
 }
