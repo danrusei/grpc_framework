@@ -75,7 +75,7 @@ func main() {
 
 func getprodtypes(ctx context.Context, client api.ProdServiceClient, vendor string) error {
 
-	//	log.Printf("requesting all product types from vendor: %s", vendor)
+	//log.Printf("requesting all product types from vendor: %s", vendor)
 
 	if vendor == "" {
 		return fmt.Errorf("Vendor arg is missing, select between available cloud vendors: google, aws, oracle")
@@ -87,12 +87,13 @@ func getprodtypes(ctx context.Context, client api.ProdServiceClient, vendor stri
 	if err != nil {
 		return err
 	}
-	/*if err != nil {
-		if errStatus, ok := status.FromError(err); ok {
-			return status.Errorf(errStatus.Code(), "error while calling client.GetVendorProdTypes() method: %v ", errStatus.Message())
+	/*
+		if err != nil {
+			if errStatus, ok := status.FromError(err); ok {
+				return status.Errorf(errStatus.Code(), "error while calling client.GetVendorProdTypes() method: %v ", errStatus.Message())
+			}
+			return fmt.Errorf("Could not get the products: %v", err)
 		}
-		return fmt.Errorf("Could not get the products: %v", err)
-	}
 	*/
 
 	fmt.Printf("%s cloud products type are: %s\n", vendor, response.GetProductType())
@@ -124,12 +125,14 @@ func getprods(ctx context.Context, client api.ProdServiceClient, vendor string, 
 		if err == io.EOF {
 			break
 		}
-		if err != nil {
-			if errStatus, ok := status.FromError(err); ok {
-				return status.Errorf(errStatus.Code(), "error while receiving the stream for client.GetVendorProds: %v ", errStatus.Message())
+		/*
+			if err != nil {
+				if errStatus, ok := status.FromError(err); ok {
+					return status.Errorf(errStatus.Code(), "error while receiving the stream for client.GetVendorProds: %v ", errStatus.Message())
+				}
+				return fmt.Errorf("error while receiving the stream for client.GetVendorProds: %v", err)
 			}
-			return fmt.Errorf("error while receiving the stream for client.GetVendorProds: %v", err)
-		}
+		*/
 		fmt.Printf("Title: %s, Url: %s,  ShortUrl: %s\n", product.GetProduct().GetTitle(), product.GetProduct().GetUrl(), product.GetProduct().GetShortUrl())
 	}
 

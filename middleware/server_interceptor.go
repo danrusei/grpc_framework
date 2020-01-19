@@ -5,6 +5,7 @@ import (
 	"path"
 	"time"
 
+	api "github.com/Danr17/grpc_framework/proto"
 	"github.com/go-logr/logr"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"google.golang.org/grpc"
@@ -14,6 +15,8 @@ import (
 func UnaryServerInterceptor(log logr.Logger, opts ...Option) grpc.UnaryServerInterceptor {
 	o := evaluateServerOpt(opts)
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+		request := req.(*api.ClientRequestType)
+		log.Info("have received a request for " + request.GetVendor() + " as vendor ")
 		startTime := time.Now()
 		newCtx := newLoggerForCall(ctx, info.FullMethod, startTime)
 

@@ -78,10 +78,6 @@ func run(logger logr.Logger, addr string) error {
 		}),
 	}
 
-	// Create an array of gRPC options with the credentials
-	//opts := []grpc.ServerOption{grpc.Creds(creds)}
-
-	//srv := grpc.NewServer(opts...)
 	srv := grpc.NewServer(
 		grpc_middleware.WithUnaryServerChain(
 			grpc_ctxtags.UnaryServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
@@ -107,12 +103,9 @@ func run(logger logr.Logger, addr string) error {
 
 //GetVendorProdTypes implement the GRPC server function
 func (serv *server) GetVendorProdTypes(ctx context.Context, req *api.ClientRequestType) (*api.ClientResponseType, error) {
-
-	log.Printf("have received a request for -> %s <- as vendor", req.GetVendor())
-
+	//log.Printf("have received a request for -> %s <- as vendor", req.GetVendor())
 	//let's assume we are able to identify the calling Customer, fake it with random numbers
-	clientID := uuid.Must(uuid.NewRandom()).String()
-	grpcklog.AddFields(ctx, map[string]interface{}{"Name": "Customer-0367" + clientID[:4]})
+	addCustomerToctx(ctx)
 
 	var prodTypes string
 	if vendorProdTypes, found := serv.prodTypes[req.GetVendor()]; found {
@@ -146,6 +139,8 @@ func (serv *server) GetVendorProdTypes(ctx context.Context, req *api.ClientReque
 func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdService_GetVendorProdsServer) error {
 
 	log.Printf("have received a request for -> %s <- product type from -> %s <- vendor", req.GetProductType(), req.GetVendor())
+	//let's assume we are able to identify the calling Customer, fake it with random numbers
+	addCustomerToctx(stream.Context())
 
 	conn, err := grpc.Dial(net.JoinHostPort(serv.storageAddr, serv.storagePort), grpc.WithInsecure())
 	if err != nil {
@@ -197,4 +192,9 @@ func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdS
 	}
 
 	return nil
+}
+
+func addCustomerToctx(ctx context.Context) {
+	clientID := uuid.Must(uuid.NewRandom()).String()
+	grpcklog.AddFields(ctx, map[string]interface{}{"Name": "Customer-0367" + clientID[:4]})
 }
