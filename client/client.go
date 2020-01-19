@@ -38,16 +38,14 @@ func main() {
 	if err != nil {
 		log.Fatalf("could not process the credentials: %v", err)
 	}
-
 	opts := []grpcklog.Option{
-		grpcklog.WithDurationField(grpcklog.DurationToDurationField),
+		grpcklog.WithDurationField(grpcklog.DurationToTimeMillisField),
 	}
-
 	dialOpts := []grpc.DialOption{
 		grpc.WithUnaryInterceptor(grpcklog.UnaryClientInterceptor(logger, opts...)),
+		grpc.WithStreamInterceptor(grpcklog.StreamClientInterceptor(logger, opts...)),
 		grpc.WithTransportCredentials(creds),
 	}
-
 	ctx, cancel := context.WithTimeout(context.Background(), 4*time.Second)
 	defer cancel()
 
@@ -82,11 +80,9 @@ func getprodtypes(ctx context.Context, client api.ProdServiceClient, vendor stri
 	if vendor == "" {
 		return fmt.Errorf("Vendor arg is missing, select between available cloud vendors: google, aws, oracle")
 	}
-
 	requestProdType := api.ClientRequestType{
 		Vendor: vendor,
 	}
-
 	response, err := client.GetVendorProdTypes(ctx, &requestProdType)
 	if err != nil {
 		return err
@@ -107,17 +103,14 @@ func getprodtypes(ctx context.Context, client api.ProdServiceClient, vendor stri
 
 func getprods(ctx context.Context, client api.ProdServiceClient, vendor string, prodType string) error {
 
-	log.Printf("requesting all %s products from %s", prodType, vendor)
-
+	//log.Printf("requesting all %s products from %s", prodType, vendor)
 	if vendor == "" || prodType == "" {
 		return fmt.Errorf("You need both, vendor and prodType args. Example command: $client oracle storage")
 	}
-
 	requestProd := api.ClientRequestProds{
 		Vendor:      vendor,
 		ProductType: prodType,
 	}
-
 	stream, err := client.GetVendorProds(ctx, &requestProd)
 	if err != nil {
 		if errStatus, ok := status.FromError(err); ok {

@@ -15,12 +15,28 @@ func UnaryClientInterceptor(log logr.Logger, opts ...Option) grpc.UnaryClientInt
 	o := evaluateClientOpt(opts)
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
 		request := req.(*api.ClientRequestType)
-		log.Info("requesting all product types from vendor: " + request.Vendor)
+		log.Info("requesting all product types from vendor: " + request.GetVendor())
 		fields := newClientLoggerFields(ctx, method)
 		startTime := time.Now()
 		err := invoker(ctx, method, req, reply, cc, opts...)
 		logFinalClientLine(o, log, fields, startTime, err, "finished client unary call")
 		return err
+	}
+}
+
+// StreamClientInterceptor returns a new streaming client interceptor that optionally logs the execution of external gRPC calls.
+func StreamClientInterceptor(log logr.Logger, opts ...Option) grpc.StreamClientInterceptor {
+	o := evaluateClientOpt(opts)
+	return func(ctx context.Context, desc *grpc.StreamDesc, cc *grpc.ClientConn, method string, streamer grpc.Streamer, opts ...grpc.CallOption) (grpc.ClientStream, error) {
+		//TODO get request parameters
+		// request := req.(*api.ClientRequestProds)
+		//log.Info("requesting all %s products from %s", request.GetProductType(), request.GetVendor())
+		log.Info("requesting all _ products from _")
+		fields := newClientLoggerFields(ctx, method)
+		startTime := time.Now()
+		clientStream, err := streamer(ctx, desc, cc, method, opts...)
+		logFinalClientLine(o, log, fields, startTime, err, "finished client streaming call")
+		return clientStream, err
 	}
 }
 
@@ -44,16 +60,9 @@ func logFinalClientLine(o *options, log logr.Logger, fields map[string]interface
 		fields["error"] = err
 	}
 
-	var name string = "Unknown User"
-	if val, ok := fields["Name"]; ok {
-		name = val.(string)
-	}
-
-	log.WithName(name).WithValues("user", "Dan")
-
 	switch level {
 	case InfoLog:
-		log.WithName(name).Info("Info - The call finished with code "+code.String(), "details", fields)
+		log.Info("Info - The call finished with code "+code.String(), "details", fields)
 	case WarningLog:
 		log.Info("Warning - The call finished with code "+code.String(), "details", fields)
 	case ErrorLog:
