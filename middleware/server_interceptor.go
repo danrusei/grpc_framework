@@ -58,9 +58,12 @@ func StreamServerInterceptor(log logr.Logger, opts ...Option) grpc.StreamServerI
 		fields := Extract(newCtx)
 		fields[durField] = durVal
 		fields["grpc.code"] = code.String()
-		if err != nil {
-			fields["error"] = err
-		}
+
+		/*
+			if err != nil {
+				fields["error"] = err
+			}
+		*/
 
 		levelLogf(log, level, "finished streaming call with code "+code.String(), fields, err)
 

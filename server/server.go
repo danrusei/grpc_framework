@@ -121,11 +121,11 @@ func (serv *server) GetVendorProdTypes(ctx context.Context, req *api.ClientReque
 	//time.Sleep(1 * time.Second)
 
 	if ctx.Err() == context.DeadlineExceeded {
-		log.Printf("dealine has exceeded, stoping server side operation")
+		//	log.Printf("dealine has exceeded, stoping server side operation")
 		return nil, status.Error(codes.DeadlineExceeded, "dealine has exceeded, stoping server side operation")
 	}
 	if ctx.Err() == context.Canceled {
-		log.Print("the user has canceled the request, stoping server side operation")
+		//	log.Print("the user has canceled the request, stoping server side operation")
 		return nil, status.Error(codes.Canceled, "the user has canceled the request, stoping server side operation")
 	}
 
@@ -157,10 +157,10 @@ func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdS
 	})
 	if err != nil {
 		if errStatus, ok := status.FromError(err); ok {
-			log.Printf("error while calling client.GetProdsDetail() method: %v ", errStatus.Message())
+			//	log.Printf("error while calling client.GetProdsDetail() method: %v ", errStatus.Message())
 			return status.Errorf(errStatus.Code(), "error while calling client.GetProdsDetail() method: %v ", errStatus.Message())
 		}
-		log.Printf("error while calling client.GetProdsDetail() method: %v ", err)
+		//	log.Printf("error while calling client.GetProdsDetail() method: %v ", err)
 		return status.Errorf(codes.Internal, "error while calling client.GetProdsDetail() method: %v ", err)
 	}
 
@@ -182,11 +182,11 @@ func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdS
 		//time.Sleep(1 * time.Second)
 
 		if ctx.Err() == context.DeadlineExceeded {
-			log.Printf("dealine has exceeded, stoping server side operation")
+			//	log.Printf("dealine has exceeded, stoping server side operation")
 			return status.Error(codes.DeadlineExceeded, "dealine has exceeded, stoping server side operation")
 		}
 		if ctx.Err() == context.Canceled {
-			log.Print("the user has canceled the request, stoping server side operation")
+			//	log.Print("the user has canceled the request, stoping server side operation")
 			return status.Error(codes.Canceled, "the user has canceled the request, stoping server side operation")
 		}
 	}

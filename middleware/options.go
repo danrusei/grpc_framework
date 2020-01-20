@@ -139,7 +139,7 @@ func DefaultCodeToLevel(code codes.Code) KlogLevel {
 	case codes.Internal:
 		return ErrorLog
 	case codes.Unavailable:
-		return WarningLog
+		return ErrorLog
 	case codes.DataLoss:
 		return ErrorLog
 	default:

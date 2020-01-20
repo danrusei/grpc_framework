@@ -15,6 +15,7 @@ import (
 	"k8s.io/klog/klogr"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/status"
 )
@@ -116,7 +117,7 @@ func getprods(ctx context.Context, client api.ProdServiceClient, vendor string, 
 		if errStatus, ok := status.FromError(err); ok {
 			return status.Errorf(errStatus.Code(), "error while calling client.GetVendorProds() method: %v ", errStatus.Message())
 		}
-		return fmt.Errorf("Could not get the stream of products : %v", err)
+		return status.Errorf(codes.Internal, "Could not get the stream of products : %v", err)
 	}
 
 	for {
@@ -129,7 +130,7 @@ func getprods(ctx context.Context, client api.ProdServiceClient, vendor string, 
 			if errStatus, ok := status.FromError(err); ok {
 				return status.Errorf(errStatus.Code(), "error while receiving the stream for client.GetVendorProds: %v ", errStatus.Message())
 			}
-			return fmt.Errorf("error while receiving the stream for client.GetVendorProds: %v", err)
+			return status.Errorf(codes.Internal, "error while receiving the stream for client.GetVendorProds: %v", err)
 		}
 
 		fmt.Printf("Title: %s, Url: %s,  ShortUrl: %s\n", product.GetProduct().GetTitle(), product.GetProduct().GetUrl(), product.GetProduct().GetShortUrl())
