@@ -80,6 +80,9 @@ func newLoggerForCall(ctx context.Context, fullMethodString string, start time.T
 
 	if d, ok := ctx.Deadline(); ok {
 		callLog = map[string]interface{}{
+			"SystemField":           "grpc server",
+			"grpc.service":          service,
+			"grpc.method":           method,
 			"grpc.request.deadline": d.Format(time.RFC3339),
 		}
 	}

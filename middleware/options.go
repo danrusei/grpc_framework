@@ -155,7 +155,7 @@ func DefaultClientCodeToLevel(code codes.Code) KlogLevel {
 	case codes.Canceled:
 		return ErrorLog
 	case codes.Unknown:
-		return InfoLog
+		return ErrorLog
 	case codes.InvalidArgument:
 		return WarningLog
 	case codes.DeadlineExceeded:
