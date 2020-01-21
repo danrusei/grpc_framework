@@ -8,7 +8,7 @@ import (
 	"net"
 	"time"
 
-	grpcklog "github.com/Danr17/grpc_framework/middleware"
+	"github.com/Danr17/grpc_framework/middleware/grpcklog"
 	api "github.com/Danr17/grpc_framework/proto"
 	"github.com/go-logr/logr"
 	"k8s.io/klog/klogr"

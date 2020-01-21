@@ -10,7 +10,7 @@ import (
 	"os"
 	"time"
 
-	grpcklog "github.com/Danr17/grpc_framework/middleware"
+	"github.com/Danr17/grpc_framework/middleware/grpcklog"
 	api "github.com/Danr17/grpc_framework/proto"
 	"k8s.io/klog/klogr"
 
