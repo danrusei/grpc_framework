@@ -6,8 +6,15 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"time"
 
+	grpcklog "github.com/Danr17/grpc_framework/middleware"
 	api "github.com/Danr17/grpc_framework/proto"
+	"github.com/go-logr/logr"
+	"k8s.io/klog/klogr"
+
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -45,13 +52,15 @@ var vendorServices = map[string][]string{
 func main() {
 
 	flag.Parse()
+	logger := klogr.New()
+
 	addr := fmt.Sprintf("localhost:%d", *port)
-	if err := run(addr); err != nil {
+	if err := run(logger, addr); err != nil {
 		log.Fatalf("could not start the server: %s", err)
 	}
 }
 
-func run(addr string) error {
+func run(logger logr.Logger, addr string) error {
 	lis, err := net.Listen("tcp", addr)
 	if err != nil {
 		return fmt.Errorf("could not listen on the port %s: %s", addr, err)
@@ -62,10 +71,24 @@ func run(addr string) error {
 		return fmt.Errorf("could not process the credentials: %v", err)
 	}
 
-	// Create an array of gRPC options with the credentials
-	opts := []grpc.ServerOption{grpc.Creds(creds)}
+	// Shared options for the logger, with a custom duration to log field function.
+	optsLog := []grpcklog.Option{
+		grpcklog.WithDurationField(func(duration time.Duration) (key string, value interface{}) {
+			return "grpc.time_ns", duration.Nanoseconds()
+		}),
+	}
 
-	srv := grpc.NewServer(opts...)
+	srv := grpc.NewServer(
+		grpc_middleware.WithUnaryServerChain(
+			grpc_ctxtags.UnaryServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
+			grpcklog.UnaryServerInterceptor(logger, optsLog...),
+		),
+		grpc.Creds(creds),
+		grpc_middleware.WithStreamServerChain(
+			grpc_ctxtags.StreamServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
+			grpcklog.StreamServerInterceptor(logger, optsLog...),
+		),
+	)
 
 	api.RegisterProdServiceServer(srv, newServer(vendorServices))
 
@@ -80,17 +103,16 @@ func run(addr string) error {
 
 //GetVendorProdTypes implement the GRPC server function
 func (serv *server) GetVendorProdTypes(ctx context.Context, req *api.ClientRequestType) (*api.ClientResponseType, error) {
-
-	log.Printf("have received a request for -> %s <- as vendor", req.GetVendor())
+	//log.Printf("have received a request for -> %s <- as vendor", req.GetVendor())
+	//let's assume we are able to identify the calling Customer, fake it with random numbers
+	addCustomerToctx(ctx)
 
 	var prodTypes string
-
 	if vendorProdTypes, found := serv.prodTypes[req.GetVendor()]; found {
 
 		for _, prodType := range vendorProdTypes {
 			prodTypes = prodTypes + " " + prodType
 		}
-
 	} else {
 		return nil, status.Errorf(codes.InvalidArgument, "wrong vendor, select between google, aws, oracle")
 	}
@@ -99,11 +121,11 @@ func (serv *server) GetVendorProdTypes(ctx context.Context, req *api.ClientReque
 	//time.Sleep(1 * time.Second)
 
 	if ctx.Err() == context.DeadlineExceeded {
-		log.Printf("dealine has exceeded, stoping server side operation")
+		//	log.Printf("dealine has exceeded, stoping server side operation")
 		return nil, status.Error(codes.DeadlineExceeded, "dealine has exceeded, stoping server side operation")
 	}
 	if ctx.Err() == context.Canceled {
-		log.Print("the user has canceled the request, stoping server side operation")
+		//	log.Print("the user has canceled the request, stoping server side operation")
 		return nil, status.Error(codes.Canceled, "the user has canceled the request, stoping server side operation")
 	}
 
@@ -111,14 +133,14 @@ func (serv *server) GetVendorProdTypes(ctx context.Context, req *api.ClientReque
 		ProductType: prodTypes,
 	}
 
-	log.Printf("the response was sent to client")
-
 	return &clientResponse, nil
 }
 
 func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdService_GetVendorProdsServer) error {
 
 	log.Printf("have received a request for -> %s <- product type from -> %s <- vendor", req.GetProductType(), req.GetVendor())
+	//let's assume we are able to identify the calling Customer, fake it with random numbers
+	addCustomerToctx(stream.Context())
 
 	conn, err := grpc.Dial(net.JoinHostPort(serv.storageAddr, serv.storagePort), grpc.WithInsecure())
 	if err != nil {
@@ -128,7 +150,6 @@ func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdS
 	defer conn.Close()
 
 	ctx := stream.Context()
-
 	client := api.NewStorageServiceClient(conn)
 	response, err := client.GetProdsDetail(ctx, &api.StorageRequest{
 		Vendor:      req.GetVendor(),
@@ -136,10 +157,10 @@ func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdS
 	})
 	if err != nil {
 		if errStatus, ok := status.FromError(err); ok {
-			log.Printf("error while calling client.GetProdsDetail() method: %v ", errStatus.Message())
+			//	log.Printf("error while calling client.GetProdsDetail() method: %v ", errStatus.Message())
 			return status.Errorf(errStatus.Code(), "error while calling client.GetProdsDetail() method: %v ", errStatus.Message())
 		}
-		log.Printf("error while calling client.GetProdsDetail() method: %v ", err)
+		//	log.Printf("error while calling client.GetProdsDetail() method: %v ", err)
 		return status.Errorf(codes.Internal, "error while calling client.GetProdsDetail() method: %v ", err)
 	}
 
@@ -161,17 +182,19 @@ func (serv *server) GetVendorProds(req *api.ClientRequestProds, stream api.ProdS
 		//time.Sleep(1 * time.Second)
 
 		if ctx.Err() == context.DeadlineExceeded {
-			log.Printf("dealine has exceeded, stoping server side operation")
+			//	log.Printf("dealine has exceeded, stoping server side operation")
 			return status.Error(codes.DeadlineExceeded, "dealine has exceeded, stoping server side operation")
 		}
 		if ctx.Err() == context.Canceled {
-			log.Print("the user has canceled the request, stoping server side operation")
+			//	log.Print("the user has canceled the request, stoping server side operation")
 			return status.Error(codes.Canceled, "the user has canceled the request, stoping server side operation")
 		}
-
 	}
 
-	log.Printf("the response was sent to client")
-
 	return nil
+}
+
+func addCustomerToctx(ctx context.Context) {
+	clientID := uuid.Must(uuid.NewRandom()).String()
+	grpcklog.AddFields(ctx, map[string]interface{}{"Name": "Customer-0367" + clientID[:4]})
 }
