@@ -11,12 +11,16 @@ import (
 	"time"
 
 	"github.com/Danr17/grpc_framework/middleware/grpcklog"
+	"github.com/Danr17/grpc_framework/middleware/grpcopentelemetry"
 	api "github.com/Danr17/grpc_framework/proto"
+
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"k8s.io/klog/klogr"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 )
 
@@ -29,6 +33,7 @@ func main() {
 
 	flag.Parse()
 	logger := klogr.New()
+	grpcopentelemetry.Init()
 
 	if flag.NArg() < 1 {
 		fmt.Fprintln(os.Stderr, "missing command: getprodtypes or getprods")
@@ -43,7 +48,12 @@ func main() {
 		grpcklog.WithDurationField(grpcklog.DurationToTimeMillisField),
 	}
 	dialOpts := []grpc.DialOption{
-		grpc.WithUnaryInterceptor(grpcklog.UnaryClientInterceptor(logger, opts...)),
+		grpc.WithUnaryInterceptor(
+			grpc_middleware.ChainUnaryClient(
+				grpcklog.UnaryClientInterceptor(logger, opts...),
+				grpcopentelemetry.UnaryClientInterceptor,
+			),
+		),
 		grpc.WithStreamInterceptor(grpcklog.StreamClientInterceptor(logger, opts...)),
 		grpc.WithTransportCredentials(creds),
 	}
@@ -58,6 +68,14 @@ func main() {
 	defer conn.Close()
 
 	client := api.NewProdServiceClient(conn)
+
+	//Adding the opentelemetry components
+	md := metadata.Pairs(
+		"timestamp", time.Now().Format(time.StampNano),
+		"client-id", "web-api-client-us-east-1",
+		"user-id", "some-test-user-id",
+	)
+	ctx = metadata.NewOutgoingContext(ctx, md)
 
 	switch cmd := flag.Arg(0); cmd {
 	case "getprodtypes":
