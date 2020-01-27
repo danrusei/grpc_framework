@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/Danr17/grpc_framework/middleware/grpcklog"
+	"github.com/Danr17/grpc_framework/middleware/grpcopentelemetry"
 	api "github.com/Danr17/grpc_framework/proto"
 	"github.com/go-logr/logr"
 	"k8s.io/klog/klogr"
@@ -53,6 +54,7 @@ func main() {
 
 	flag.Parse()
 	logger := klogr.New()
+	grpcopentelemetry.Init()
 
 	addr := fmt.Sprintf("localhost:%d", *port)
 	if err := run(logger, addr); err != nil {
@@ -82,6 +84,7 @@ func run(logger logr.Logger, addr string) error {
 		grpc_middleware.WithUnaryServerChain(
 			grpc_ctxtags.UnaryServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
 			grpcklog.UnaryServerInterceptor(logger, optsLog...),
+			grpcopentelemetry.UnaryServerInterceptor,
 		),
 		grpc.Creds(creds),
 		grpc_middleware.WithStreamServerChain(
