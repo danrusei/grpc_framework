@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"net/http"
 	"time"
 
 	"github.com/Danr17/grpc_framework/middleware/grpcklog"
@@ -16,6 +17,7 @@ import (
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -26,7 +28,8 @@ import (
 )
 
 var (
-	port = flag.Int("grpc-port", 8080, "The gRPC server port")
+	portGRPC = flag.Int("grpc-port", 8080, "The gRPC server port")
+	portREST = flag.Int("rest-port", 8081, "The REST server port")
 )
 
 type server struct {
@@ -56,13 +59,48 @@ func main() {
 	logger := klogr.New()
 	grpcopentelemetry.Init()
 
-	addr := fmt.Sprintf("localhost:%d", *port)
-	if err := run(logger, addr); err != nil {
-		log.Fatalf("could not start the server: %s", err)
-	}
+	grpcAddr := fmt.Sprintf("localhost:%d", *portGRPC)
+	go func() {
+		if err := runGRPCServer(logger, grpcAddr); err != nil {
+			log.Fatalf("could not start the server: %s", err)
+		}
+	}()
+
+	restAddr := fmt.Sprintf("localhost:%d", *portREST)
+	go func() {
+		if err := runRESTServer(restAddr, grpcAddr); err != nil {
+			log.Fatalf("could not start the server: %s", err)
+		}
+	}()
+
+	// infinite loop
+	log.Printf("Entering infinite loop")
+	select {}
 }
 
-func run(logger logr.Logger, addr string) error {
+func runRESTServer(restAddr, grpcAdd string) error {
+	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	mux := runtime.NewServeMux()
+	creds, err := credentials.NewClientTLSFromFile("../cert/service.pem", "")
+	if err != nil {
+		return fmt.Errorf("could not load TLS certificate: %s", err)
+	}
+	// Setup the client gRPC options
+	opts := []grpc.DialOption{grpc.WithTransportCredentials(creds)}
+	// Register ping
+	err = api.RegisterProdServiceHandlerFromEndpoint(ctx, mux, grpcAdd, opts)
+	if err != nil {
+		return fmt.Errorf("could not register service ProdService: %s", err)
+	}
+	log.Printf("starting HTTP/1.1 REST server on %s", restAddr)
+	http.ListenAndServe(restAddr, mux)
+	return nil
+}
+
+func runGRPCServer(logger logr.Logger, addr string) error {
 	lis, err := net.Listen("tcp", addr)
 	if err != nil {
 		return fmt.Errorf("could not listen on the port %s: %s", addr, err)
