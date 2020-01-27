@@ -13,6 +13,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
+from google.api import annotations_pb2 as google_dot_api_dot_annotations__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -20,8 +21,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='api',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\tapi.proto\x12\x03\x61pi\"#\n\x11\x43lientRequestType\x12\x0e\n\x06vendor\x18\x01 \x01(\t\")\n\x12\x43lientResponseType\x12\x13\n\x0bproductType\x18\x01 \x01(\t\"9\n\x12\x43lientRequestProds\x12\x0e\n\x06vendor\x18\x01 \x01(\t\x12\x13\n\x0bproductType\x18\x02 \x01(\t\"6\n\x13\x43lientResponseProds\x12\x1f\n\x07product\x18\x01 \x01(\x0b\x32\x0e.api.ProdsPrep\"9\n\tProdsPrep\x12\r\n\x05title\x18\x01 \x01(\t\x12\x0b\n\x03url\x18\x02 \x01(\t\x12\x10\n\x08shortUrl\x18\x03 \x01(\t\"5\n\x0eStorageRequest\x12\x0e\n\x06vendor\x18\x01 \x01(\t\x12\x13\n\x0bproductType\x18\x02 \x01(\t\"3\n\x0fStorageResponse\x12 \n\nprodDetail\x18\x01 \x03(\x0b\x32\x0c.api.Product\"%\n\x07Product\x12\r\n\x05title\x18\x01 \x01(\t\x12\x0b\n\x03url\x18\x02 \x01(\t2\x9b\x01\n\x0bProdService\x12\x45\n\x12GetVendorProdTypes\x12\x16.api.ClientRequestType\x1a\x17.api.ClientResponseType\x12\x45\n\x0eGetVendorProds\x12\x17.api.ClientRequestProds\x1a\x18.api.ClientResponseProds0\x01\x32M\n\x0eStorageService\x12;\n\x0eGetProdsDetail\x12\x13.api.StorageRequest\x1a\x14.api.StorageResponseb\x06proto3')
-)
+  serialized_pb=_b('\n\tapi.proto\x12\x03\x61pi\x1a\x1cgoogle/api/annotations.proto\"#\n\x11\x43lientRequestType\x12\x0e\n\x06vendor\x18\x01 \x01(\t\")\n\x12\x43lientResponseType\x12\x13\n\x0bproductType\x18\x01 \x01(\t\"9\n\x12\x43lientRequestProds\x12\x0e\n\x06vendor\x18\x01 \x01(\t\x12\x13\n\x0bproductType\x18\x02 \x01(\t\"6\n\x13\x43lientResponseProds\x12\x1f\n\x07product\x18\x01 \x01(\x0b\x32\x0e.api.ProdsPrep\"9\n\tProdsPrep\x12\r\n\x05title\x18\x01 \x01(\t\x12\x0b\n\x03url\x18\x02 \x01(\t\x12\x10\n\x08shortUrl\x18\x03 \x01(\t\"5\n\x0eStorageRequest\x12\x0e\n\x06vendor\x18\x01 \x01(\t\x12\x13\n\x0bproductType\x18\x02 \x01(\t\"3\n\x0fStorageResponse\x12 \n\nprodDetail\x18\x01 \x03(\x0b\x32\x0c.api.Product\"%\n\x07Product\x12\r\n\x05title\x18\x01 \x01(\t\x12\x0b\n\x03url\x18\x02 \x01(\t2\xd3\x01\n\x0bProdService\x12\x63\n\x12GetVendorProdTypes\x12\x16.api.ClientRequestType\x1a\x17.api.ClientResponseType\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/api/prodtypes:\x01*\x12_\n\x0eGetVendorProds\x12\x17.api.ClientRequestProds\x1a\x18.api.ClientResponseProds\"\x18\x82\xd3\xe4\x93\x02\x12\"\r/v1/api/prods:\x01*0\x01\x32M\n\x0eStorageService\x12;\n\x0eGetProdsDetail\x12\x13.api.StorageRequest\x1a\x14.api.StorageResponseb\x06proto3')
+  ,
+  dependencies=[google_dot_api_dot_annotations__pb2.DESCRIPTOR,])
 
 
 
@@ -52,8 +54,8 @@ _CLIENTREQUESTTYPE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=18,
-  serialized_end=53,
+  serialized_start=48,
+  serialized_end=83,
 )
 
 
@@ -83,8 +85,8 @@ _CLIENTRESPONSETYPE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=55,
-  serialized_end=96,
+  serialized_start=85,
+  serialized_end=126,
 )
 
 
@@ -121,8 +123,8 @@ _CLIENTREQUESTPRODS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=98,
-  serialized_end=155,
+  serialized_start=128,
+  serialized_end=185,
 )
 
 
@@ -152,8 +154,8 @@ _CLIENTRESPONSEPRODS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=157,
-  serialized_end=211,
+  serialized_start=187,
+  serialized_end=241,
 )
 
 
@@ -197,8 +199,8 @@ _PRODSPREP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=213,
-  serialized_end=270,
+  serialized_start=243,
+  serialized_end=300,
 )
 
 
@@ -235,8 +237,8 @@ _STORAGEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=272,
-  serialized_end=325,
+  serialized_start=302,
+  serialized_end=355,
 )
 
 
@@ -266,8 +268,8 @@ _STORAGERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=327,
-  serialized_end=378,
+  serialized_start=357,
+  serialized_end=408,
 )
 
 
@@ -304,8 +306,8 @@ _PRODUCT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=380,
-  serialized_end=417,
+  serialized_start=410,
+  serialized_end=447,
 )
 
 _CLIENTRESPONSEPRODS.fields_by_name['product'].message_type = _PRODSPREP
@@ -384,8 +386,8 @@ _PRODSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=420,
-  serialized_end=575,
+  serialized_start=450,
+  serialized_end=661,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetVendorProdTypes',
@@ -394,7 +396,7 @@ _PRODSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_CLIENTREQUESTTYPE,
     output_type=_CLIENTRESPONSETYPE,
-    serialized_options=None,
+    serialized_options=_b('\202\323\344\223\002\026\"\021/v1/api/prodtypes:\001*'),
   ),
   _descriptor.MethodDescriptor(
     name='GetVendorProds',
@@ -403,7 +405,7 @@ _PRODSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_CLIENTREQUESTPRODS,
     output_type=_CLIENTRESPONSEPRODS,
-    serialized_options=None,
+    serialized_options=_b('\202\323\344\223\002\022\"\r/v1/api/prods:\001*'),
   ),
 ])
 _sym_db.RegisterServiceDescriptor(_PRODSERVICE)
@@ -417,8 +419,8 @@ _STORAGESERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=1,
   serialized_options=None,
-  serialized_start=577,
-  serialized_end=654,
+  serialized_start=663,
+  serialized_end=740,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetProdsDetail',

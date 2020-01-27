@@ -2,9 +2,21 @@ syntax = "proto3";
 
 package api;
 
+import "google/api/annotations.proto";
+
 service ProdService {
-    rpc GetVendorProdTypes(ClientRequestType) returns (ClientResponseType);
-    rpc GetVendorProds(ClientRequestProds) returns (stream ClientResponseProds);
+    rpc GetVendorProdTypes(ClientRequestType) returns (ClientResponseType) {
+        option (google.api.http) = {
+            post: "/v1/api/prodtypes"
+            body: "*"
+        };
+    };
+    rpc GetVendorProds(ClientRequestProds) returns (stream ClientResponseProds) {
+        option (google.api.http) = {
+            post: "/v1/api/prods"
+            body: "*"
+        };
+    };
 }
 
 message ClientRequestType {
