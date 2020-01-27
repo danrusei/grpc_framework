@@ -37,7 +37,7 @@ func UnaryServerInterceptor(ctx context.Context, req interface{}, info *grpc.Una
 	tr := global.TraceProvider().Tracer("grpc_tracer")
 	ctx, span := tr.Start(
 		ctx,
-		"Cloud-Products-api",
+		"Cloud-Products-types",
 		trace.WithAttributes(serverSpanAttrs...),
 		trace.ChildOf(spanCtx),
 		trace.WithSpanKind(trace.SpanKindServer),
@@ -53,7 +53,7 @@ func UnaryClientInterceptor(ctx context.Context, method string, req, reply inter
 	metadataCopy := requestMetadata.Copy()
 
 	tr := global.TraceProvider().Tracer("grpc_tracer")
-	err := tr.WithSpan(ctx, "Cloud-Products-api",
+	err := tr.WithSpan(ctx, "Cloud-Products-types",
 		func(ctx context.Context) error {
 			grpctrace.Inject(ctx, &metadataCopy)
 			ctx = metadata.NewOutgoingContext(ctx, metadataCopy)
