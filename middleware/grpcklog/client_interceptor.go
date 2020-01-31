@@ -28,15 +28,31 @@ func UnaryClientInterceptor(log logr.Logger, opts ...Option) grpc.UnaryClientInt
 func StreamClientInterceptor(log logr.Logger, opts ...Option) grpc.StreamClientInterceptor {
 	o := evaluateClientOpt(opts)
 	return func(ctx context.Context, desc *grpc.StreamDesc, cc *grpc.ClientConn, method string, streamer grpc.Streamer, opts ...grpc.CallOption) (grpc.ClientStream, error) {
-		//TODO get request parameters
-		// request := req.(*api.ClientRequestProds)
-		//log.Info("requesting all %s products from %s", request.GetProductType(), request.GetVendor())
-		log.Info("requesting all _ products from _")
 		fields := newClientLoggerFields(ctx, method)
 		startTime := time.Now()
 		clientStream, err := streamer(ctx, desc, cc, method, opts...)
 		logFinalClientLine(o, log, fields, startTime, err, "finished client streaming call")
-		return clientStream, err
+		return newWrappedStream(clientStream, log), err
+	}
+}
+
+// wrappedStream  wraps around the embedded grpc.ClientStream, and intercepts the RecvMsg and
+// SendMsg method call.
+type wrappedStream struct {
+	grpc.ClientStream
+	logr.Logger
+}
+
+func (w *wrappedStream) SendMsg(m interface{}) error {
+	request := m.(*api.ClientRequestProds)
+	w.Info("requesting all " + request.GetProductType() + " products from " + request.GetVendor())
+	return w.ClientStream.SendMsg(m)
+}
+
+func newWrappedStream(s grpc.ClientStream, log logr.Logger) grpc.ClientStream {
+	return &wrappedStream{
+		s,
+		log,
 	}
 }
 
