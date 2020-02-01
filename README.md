@@ -2,16 +2,18 @@
 
 Example gRPC service, using Klog & Opentelemetry as gRPC middlewares and grpc-gateway to expose REST endpoint.
 
-### Simple gRPC Service with Error handling and secure communication over SSL/TLS
+### I. gRPC tutorials
+
+#### Simple gRPC Service with Error handling and secure communication over SSL/TLS
 * https://dev-state.com/posts/grpc_framework_1/
 
-### Extend gRPC Service with Streams and Python backend
+#### Extend gRPC Service with Streams and Python backend
 * https://dev-state.com/posts/grpc_framework_2/
 
-### Add gRPC Interceptors to log requests and grpc-gateway for REST endpoints
+#### Add gRPC Interceptors to log requests and grpc-gateway for REST endpoints
 * https://dev-state.com/posts/grpc_framework_3/
 
-### I. GO Client
+### II. GO gRPC Client
 
 GO Cient -- (GRPC) --> GO Server --> (GRPC) -- Python Server (Storage)
 
@@ -106,7 +108,7 @@ INFO:root:have received a request for -> compute <- product type from -> google 
 INFO:root:a number of 5 products were sent to client
 ```
 
-### I. REST Client
+### III. REST Client
 
 HTTP Client -- (REST) --> GO Server --> (GRPC) -- Python Server (Storage)
 
