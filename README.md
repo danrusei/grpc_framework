@@ -1,6 +1,15 @@
 # grpc_framework
 
-Example gRPC service, using Klog & Opentelemetry gRPC middleware and grpc-gateway to expose REST endpoint.
+Example gRPC service, using Klog & Opentelemetry as gRPC middlewares and grpc-gateway to expose REST endpoint.
+
+### Simple gRPC Service with Error handling and secure communication over SSL/TLS
+* https://dev-state.com/posts/grpc_framework_1/
+
+### Extend gRPC Service with Streams and Python backend
+* https://dev-state.com/posts/grpc_framework_2/
+
+### Add gRPC Interceptors to log requests and grpc-gateway for REST endpoints
+* https://dev-state.com/posts/grpc_framework_3/
 
 ### I. GO Client
 
